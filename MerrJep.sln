@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerrJep", "MerrJep\MerrJep.csproj", "{D1ED9E73-C08F-4425-9661-6C61F01C395E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerrJepData", "MerrJepData\MerrJepData.csproj", "{46E66125-4E7B-459C-9D9E-B257E56D18A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1ED9E73-C08F-4425-9661-6C61F01C395E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1ED9E73-C08F-4425-9661-6C61F01C395E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1ED9E73-C08F-4425-9661-6C61F01C395E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1ED9E73-C08F-4425-9661-6C61F01C395E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46E66125-4E7B-459C-9D9E-B257E56D18A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46E66125-4E7B-459C-9D9E-B257E56D18A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46E66125-4E7B-459C-9D9E-B257E56D18A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46E66125-4E7B-459C-9D9E-B257E56D18A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E257AF13-E445-4684-9804-7E2CA2746C7B}
+	EndGlobalSection
+EndGlobal
