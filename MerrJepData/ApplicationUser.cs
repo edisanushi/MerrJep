@@ -9,6 +9,8 @@ namespace MerrJepData
 {
 	public class ApplicationUser : IdentityUser
 	{
-
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public ICollection<Item> Items { get; set; }
 	}
 }

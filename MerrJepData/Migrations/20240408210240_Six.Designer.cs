@@ -4,6 +4,7 @@ using MerrJepData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MerrJepData.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408210240_Six")]
+    partial class Six
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,35 +98,6 @@ namespace MerrJepData.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MerrJepData.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte[]>("ImageByte")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("IsMainImage")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("MerrJepData.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -146,6 +120,10 @@ namespace MerrJepData.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -294,15 +272,6 @@ namespace MerrJepData.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MerrJepData.Image", b =>
-                {
-                    b.HasOne("MerrJepData.Item", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MerrJepData.Item", b =>
                 {
                     b.HasOne("MerrJepData.ApplicationUser", "ApplicationUser")
@@ -368,11 +337,6 @@ namespace MerrJepData.Migrations
             modelBuilder.Entity("MerrJepData.ApplicationUser", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("MerrJepData.Item", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

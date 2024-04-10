@@ -44,12 +44,10 @@ namespace MerrJep.Controllers
 				else
 				{
 					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-					return View();
+					return Json(new {valid="false", message = "Ju lutem vendosni kredencialet e sakta" });
 				}
 			}
-
-			// If we got this far, something failed, redisplay form
-			return View();
+			return Json(new {success = "false", message = "Ka nodhur nje gabim" });
 		}
 
 		[HttpGet]
@@ -67,18 +65,31 @@ namespace MerrJep.Controllers
 
 				await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
 				await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-					var result = await _userManager.CreateAsync(user, Input.Password);
-					var result2 = result;
-					if (result.Succeeded)
+				var result = await _userManager.CreateAsync(user, Input.Password);
+				if (result.Succeeded)
+				{
+					await _signInManager.SignInAsync(user, isPersistent: false);
+					return Json(new
 					{
-						var userId = await _userManager.GetUserIdAsync(user);
-						await _signInManager.SignInAsync(user, isPersistent: false);
-						return Json("true");
-					}
+						success = "true",
+					});
+				}
+				else
+				{
+					return Json(new
+					{
+						success = "false",
+						message = "Ndodhi nje gabim gjate regjistrimit"
+					});
+				}
 			}
 
-			// If we got this far, something failed, redisplay form
-			return Json("false");
+
+			return Json(new
+			{
+				success = false,
+				message = "Ndodhi nje gabim gjate regjistrimit"
+			}); ;
 		}
 
 

@@ -18,5 +18,8 @@ namespace MerrJepData
 		{
 			base.OnModelCreating(builder);
 		}
+
+		public DbSet<Item> Items { get; set; } 
+		public DbSet<Image> Images { get; set; }
 	}
 }

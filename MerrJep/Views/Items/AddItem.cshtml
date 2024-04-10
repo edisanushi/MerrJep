@@ -1,0 +1,292 @@
+﻿@{
+	ViewData["Title"] = "Shto Artikull";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	.error_label {
+		color: red;
+	}
+</style>
+
+<main>
+
+
+	<section class="pt-4 pt-md-5 pb-0">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 mx-auto text-center">
+					<h1 class="fs-2 mb-2">Shto nje artikull te ri</h1>
+					<p class="mb-0">Ju lutem plotesoni te gjitha fushat e meposhtme per te shtuar nje artikull te ri per te shitur</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-10 mx-auto">
+					<div class="vstack gap-4">
+
+						<div class="card shadow">
+							<div class="card-header border-bottom">
+								<h5 class="mb-0">Te dhenat e artikullit</h5>
+							</div>
+
+							<div class="card-body">
+								<div class="row g-3">
+									<div class="col-12">
+										<label class="form-label">Emri i Artikullit<span style="color: red">*</span></label>
+										<input type="text" id="Emri" class="form-control" placeholder="Emri i artikullit">
+										<label class="error_label emri_error_label" style="display: none"></label>
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label">Sasia<span style="color: red">*</span></label>
+										<input class="form-control" id="Sasia" type="text" placeholder="Vendosni sasine e gjendjes se artikullit">
+										<label class="error_label sasia_error_label" style="display: none"></label>
+									</div>
+
+									<div class="col-md-6">
+										<label class="form-label">Cmimi<span style="color: red">*</span></label>
+										<input class="form-control" id="Cmimi" type="email" placeholder="Vendosni cmimin e artikullit">
+										<label class="error_label cmimi_error_label" style="display: none"></label>
+									</div>
+
+
+									<div class="col-12">
+										<label class="form-label" >Pershkrimi<span style="color: red">*</span></label>
+										<textarea class="form-control" id="Pershkrimi" rows="5" placeholder="Vendosni pershkrimin e artikullit"></textarea>
+										<label class="error_label pershkrimi_error_label" style="display: none"></label>
+									</div>
+
+									<div class="col-12" id="main-photo">
+										<label class="form-label">Ngarkoni foton kryesore te artikullit <span style="color: red">*</span></label>
+										<div class="dropzone dropzone-custom" data-dropzone='{"maxFiles": 1, "addRemoveLinks": false}'>
+											<div class="dz-message needsclick">
+												<i class="bi bi-upload display-3"></i>
+												<p>Klikoni ketu per te ngarkuar foto</p>
+											</div>
+											<div class="dz-preview row g-4">
+												<div class="col-xl-2 col-md-4 col-sm-6">
+													<div class="card p-2 mb-0 shadow-none border position-relative h-100">
+														<img data-dz-thumbnail src="#" class="rounded bg-light" alt="">
+														<div class="mt-2">
+															<a href="javascript:void(0);" class="text-body-secondary fw-bold" data-dz-name></a>
+															<p class="mb-0 small" data-dz-size></p>
+														</div>
+														<div class="position-absolute top-0 start-100 translate-middle">
+															<a href="#!" class="btn btn-danger rounded-circle icon-sm p-0 remove-main-image" data-dz-remove>
+																<i class="fas fa-times"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<label class="error_label image_error_label" style="display: none"></label>
+										<p class="small mb-0 mt-2"><b>Shenim:</b> Foto duhet te jete ne nje nga fomatet JPG, JPEG, ose PNG. Permasat e sugjeruara jane 600px * 450px.</p>
+									</div>
+
+									<div class="col-12" id="additional-photos">
+										<label class="form-label">Opsionale - Ngarkoni foto te tjera plotesuese per artikullin (Maksimumi 10)</label>
+										<div class="dropzone dropzone-custom" data-dropzone='{"maxFiles": 10, "addRemoveLinks": false}'>
+											<div class="dz-message needsclick">
+												<i class="bi bi-upload display-3"></i>
+												<p>Klikoni ketu per te ngarkuar foto</p>
+											</div>
+											<div class="dz-preview row g-4">
+												<div class="col-xl-2 col-md-4 col-sm-6">
+													<div class="card p-2 mb-0 shadow-none border position-relative h-100">
+														<img data-dz-thumbnail src="#" class="rounded bg-light" alt="">
+														<div class="mt-2">
+															<a href="javascript:void(0);" class="text-body-secondary fw-bold" data-dz-name></a>
+															<p class="mb-0 small" data-dz-size></p>
+														</div>
+														<div class="position-absolute top-0 start-100 translate-middle">
+															<a href="#!" class="btn btn-danger rounded-circle icon-sm p-0 remove-add-image" data-dz-remove>
+																<i class="fas fa-times"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<label class="error_label addImage_error_label" style="display: none"></label>
+										<p class="small mb-0 mt-2"><b>Shenim:</b> Foto duhet te jete ne nje nga fomatet JPG, JPEG, ose PNG. Permasat e sugjeruara jane 600px * 450px.</p>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						
+						<div class="text-end">
+							<button id="submit-item" class="btn btn-primary mb-0">Shto Artikull</button>
+							<label class="error_label submit_error_label" style="display: none"></label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+</main>
+
+<script>
+	$("#submit-item").click(function () {
+		$(".submit_error_label").html("");
+		$(".submit_error_label").css("display", "none");
+		var emri = $("#Emri").val();
+		var sasia = $("#Sasia").val();
+		var cmimi = $("#Cmimi").val();
+		var pershkrimi = $("#Pershkrimi").val();
+		var thumbnailEl = $("#main-photo img");
+		var thumbnail = null;
+		if ($("#main-photo img").length == 1) {
+			thumbnail = {
+				Content: $("#main-photo img").attr("src"),
+				FileName: $("#main-photo img").attr("alt")
+			}
+		}
+		else {
+			thumbnail = {
+				length: $("#main-photo img").length
+			}
+		}
+		var images = [];
+		$("#additional-photos img").each(function () {
+			var image = {
+				Content: $(this).attr("src"),
+				FileName: $(this).attr("alt")
+			}
+			images.push(image);
+		});
+		var obj = {
+			Name: emri,
+			AvailableQuantity: sasia,
+			Price: cmimi,
+			Description: pershkrimi,
+			Thumbnail: thumbnail,
+			Images: images
+		}
+		if (checkFormIsValid(obj)){
+			const button = document.getElementById('submit-item');
+			button.setAttribute('disabled', '');
+			$("#submit-item").html('<i id="loading-icon" class="fas fa-spinner fa-spin" style=" color: white; padding: 5px 30px">');
+			SubmitForm(obj);
+		}
+	});
+
+	function SubmitForm(obj) {
+		const button = document.getElementById('submit-item');
+		$.ajax({
+			url: "/Items/AddItem",
+			method: "POST",
+			data: obj,
+			success: function (data) {
+				if (data.valid == "true") {
+					window.location = "/Home/Index";
+				}
+				else {
+					$(".submit_error_label").html(data.message);
+					$(".submit_error_label").css("display", "block");
+					button.removeAttribute('disabled');
+					$("#submit-item").html("Shto Artikull");
+				}
+			},
+			error: function (err) {
+				$(".submit_error_label").html("Ndodhi nje gabim gjate shtimit te artikullit. Ju lutem provoni perseri");
+				$(".submit_error_label").css("display", "block");
+				button.removeAttribute('disabled');
+				$("#submit-item").html("Shto Artikull");
+			}
+		});
+	}
+
+
+	function isEmptyOrWhitespace(text) {
+		if (text == null || text == undefined || text == "" || text.trim() == "") {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
+	function checkFormIsValid(obj) {
+		debugger;
+		var isValid = true;
+		if (isEmptyOrWhitespace(obj.Name)) {
+			$(".emri_error_label").html("Ju lutem plotesoni emrin e artikullit");
+			$(".emri_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (isEmptyOrWhitespace(obj.AvailableQuantity)) {
+			$(".sasia_error_label").html("Ju lutem plotesoni sasine e artikullit");
+			$(".sasia_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (isEmptyOrWhitespace(obj.Price)) {
+			$(".cmimi_error_label").html("Ju lutem plotesoni cmimin e artikullit");
+			$(".cmimi_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (isEmptyOrWhitespace(obj.Description)) {
+			$(".pershkrimi_error_label").html("Ju lutem plotesoni nje pershkrim per artikullin");
+			$(".pershkrimi_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (obj.Thumbnail.length == 0){
+			$(".image_error_label").html("Ju lutem ngarkoni nje imazh per artikullin");
+			$(".image_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (obj.Thumbnail.length > 1) {
+			$(".image_error_label").html("Lejohet te ngarkosh vetem nje imazh per foton kryesore. Ju lutem hiqni imazhet e teperta");
+			$(".image_error_label").css("display", "block");
+			isValid = false;
+			$(".remove-main-image").click(function () {
+				$(".image_error_label").css("display", "none");
+			});
+		}
+		if (obj.Images.length > 10) {
+			$(".addImage_error_label").html("Lejohet te ngarkosh deri ne 10 imazhe per fotot plotesuese. Ju lutem hiqni imazhet e teperta");
+			$(".addImage_error_label").css("display", "block");
+			isValid = false;
+			$(".remove-add-image").click(function () {
+				$(".addImage_error_label").css("display", "none");
+			});
+		}
+		return isValid;
+	}
+
+	$("input").keyup(function () {
+		$(this).siblings("label.error_label").html("");
+	});
+
+	$("textarea").keyup(function () {
+		$(this).siblings("label.error_label").html("");
+	});
+
+
+	$('#Sasia').bind('keydown', function (event) {
+		checkRegularExpression("^[0-9\B]");
+	});
+
+	$('#Cmimi').bind('keydown', function (event) {
+		checkRegularExpression("^[0-9\B]");
+	});
+
+	function checkRegularExpression(regularExpression) {
+		var regex = new RegExp(regularExpression);
+		var key = event.key;
+		if (!regex.test(key)) {
+			event.preventDefault();
+			return false;
+		}
+	}
+
+</script>

@@ -4,6 +4,7 @@ using MerrJepData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MerrJepData.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408205210_AddedItemsTable1")]
+    partial class AddedItemsTable1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,14 +43,6 @@ namespace MerrJepData.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -95,35 +90,6 @@ namespace MerrJepData.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MerrJepData.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte[]>("ImageByte")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("IsMainImage")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("MerrJepData.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -131,11 +97,6 @@ namespace MerrJepData.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
@@ -147,6 +108,10 @@ namespace MerrJepData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -155,8 +120,6 @@ namespace MerrJepData.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Items");
                 });
@@ -294,26 +257,6 @@ namespace MerrJepData.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MerrJepData.Image", b =>
-                {
-                    b.HasOne("MerrJepData.Item", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MerrJepData.Item", b =>
-                {
-                    b.HasOne("MerrJepData.ApplicationUser", "ApplicationUser")
-                        .WithMany("Items")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -363,16 +306,6 @@ namespace MerrJepData.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MerrJepData.ApplicationUser", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("MerrJepData.Item", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
