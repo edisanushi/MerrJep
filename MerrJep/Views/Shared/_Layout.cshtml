@@ -8,6 +8,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/assets/vendor/dropzone/js/dropzone.js"></script>
+    <script src="~/assets/vendor/nouislider/nouislider.min.js"></script>
 
     <script>
         const storedTheme = localStorage.getItem('theme')
@@ -80,6 +81,7 @@
     <link rel="stylesheet" type="text/css" href="~/assets/vendor/flatpickr/css/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/vendor/choices/css/choices.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/vendor/dropzone/css/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/vendor/nouislider/nouislider.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
 
 
@@ -430,12 +432,12 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+   @*  <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
-
+    </div> *@
+    @RenderBody()
 
     <div class="back-top"></div>
 

@@ -7,7 +7,9 @@
 		public int AvailableQuantity { get; set; }
 		public double Price { get; set; }
 		public ImageObj Thumbnail { get; set; }
+		//public IFormFile Thumbnail { get; set; }
 		public List<ImageObj> Images { get; set; }
+		//public List<IFormFile> Images { get; set; }
 		public string UserId { get; set; }
 	}
 
@@ -15,5 +17,6 @@
 	{
 		public string Content { get; set; }
 		public string FileName { get; set; }
+		public string Type { get; set; }
 	}
 }

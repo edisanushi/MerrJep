@@ -68,5 +68,10 @@ namespace MerrJep.Controllers
 				return Json(new {valid="false", message = "Ndodhi nje gabim gjate shtimit te artikullit. Ju lutem provoni perseri" });
 			}
 		}
+
+		public IActionResult ItemAdded()
+		{
+			return View();
+		}
 	}
 }

@@ -63,7 +63,7 @@
 
 									<div class="col-12" id="main-photo">
 										<label class="form-label">Ngarkoni foton kryesore te artikullit <span style="color: red">*</span></label>
-										<div class="dropzone dropzone-custom" data-dropzone='{"maxFiles": 1, "addRemoveLinks": false}'>
+										<div class="dropzone dropzone-custom" id="mainPhotoDropzone" data-dropzone='{autoProcessQueue: false, maxFiles": 1, "addRemoveLinks": false}'>
 											<div class="dz-message needsclick">
 												<i class="bi bi-upload display-3"></i>
 												<p>Klikoni ketu per te ngarkuar foto</p>
@@ -90,8 +90,8 @@
 									</div>
 
 									<div class="col-12" id="additional-photos">
-										<label class="form-label">Opsionale - Ngarkoni foto te tjera plotesuese per artikullin (Maksimumi 10)</label>
-										<div class="dropzone dropzone-custom" data-dropzone='{"maxFiles": 10, "addRemoveLinks": false}'>
+										<label class="form-label">Opsionale - Ngarkoni foto te tjera plotesuese per artikullin (Maksimumi 3)</label>
+										<div class="dropzone dropzone-custom" id="additionalPhotoDropzone" data-dropzone='{autoProcessQueue: false, "maxFiles": 3, "addRemoveLinks": false}'>
 											<div class="dz-message needsclick">
 												<i class="bi bi-upload display-3"></i>
 												<p>Klikoni ketu per te ngarkuar foto</p>
@@ -135,6 +135,7 @@
 </main>
 
 <script>
+	
 	$("#submit-item").click(function () {
 		$(".submit_error_label").html("");
 		$(".submit_error_label").css("display", "none");
@@ -142,42 +143,46 @@
 		var sasia = $("#Sasia").val();
 		var cmimi = $("#Cmimi").val();
 		var pershkrimi = $("#Pershkrimi").val();
-		var thumbnailEl = $("#main-photo img");
-		var thumbnail = null;
-		if ($("#main-photo img").length == 1) {
-			thumbnail = {
-				Content: $("#main-photo img").attr("src"),
-				FileName: $("#main-photo img").attr("alt")
-			}
-		}
-		else {
-			thumbnail = {
-				length: $("#main-photo img").length
-			}
-		}
-		var images = [];
-		$("#additional-photos img").each(function () {
-			var image = {
-				Content: $(this).attr("src"),
-				FileName: $(this).attr("alt")
-			}
-			images.push(image);
-		});
+		var thumbnail = getFilesFromDropzone("mainPhotoDropzone");
+		var images = getFilesFromDropzone("additionalPhotoDropzone");
 		var obj = {
+			Images: images,
 			Name: emri,
 			AvailableQuantity: sasia,
 			Price: cmimi,
 			Description: pershkrimi,
-			Thumbnail: thumbnail,
-			Images: images
+			Thumbnail: thumbnail
 		}
-		if (checkFormIsValid(obj)){
+		if (checkFormIsValid(obj)) {
 			const button = document.getElementById('submit-item');
 			button.setAttribute('disabled', '');
 			$("#submit-item").html('<i id="loading-icon" class="fas fa-spinner fa-spin" style=" color: white; padding: 5px 30px">');
-			SubmitForm(obj);
+			var data = {
+				Images: images,
+				Name: emri,
+				AvailableQuantity: sasia,
+				Price: cmimi,
+				Description: pershkrimi,
+				Thumbnail: thumbnail[0]
+			}
+			SubmitForm(data);
 		}
 	});
+
+	function getFilesFromDropzone(id) {
+		var fileDropzone = Dropzone.forElement(`#${id}`);
+		var imageFiles = fileDropzone.files;
+		var images = [];
+		imageFiles.forEach(function (file) {
+			var image = {
+				Content: file.dataURL,
+				FileName: file.name,
+				Type: file.type
+			}
+			images.push(image);
+		});
+		return images;
+	}
 
 	function SubmitForm(obj) {
 		const button = document.getElementById('submit-item');
@@ -187,7 +192,7 @@
 			data: obj,
 			success: function (data) {
 				if (data.valid == "true") {
-					window.location = "/Home/Index";
+					window.location = "/Items/ItemAdded";
 				}
 				else {
 					$(".submit_error_label").html(data.message);
@@ -252,8 +257,8 @@
 				$(".image_error_label").css("display", "none");
 			});
 		}
-		if (obj.Images.length > 10) {
-			$(".addImage_error_label").html("Lejohet te ngarkosh deri ne 10 imazhe per fotot plotesuese. Ju lutem hiqni imazhet e teperta");
+		if (obj.Images.length > 3) {
+			$(".addImage_error_label").html("Lejohet te ngarkosh deri ne 3 imazhe per fotot plotesuese. Ju lutem hiqni imazhet e teperta");
 			$(".addImage_error_label").css("display", "block");
 			isValid = false;
 			$(".remove-add-image").click(function () {
