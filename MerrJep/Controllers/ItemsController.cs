@@ -37,7 +37,7 @@ namespace MerrJep.Controllers
 				newItem.DateAdded = DateTime.Now;
 				var user = await _userManager.GetUserAsync(User);
 				var userId = await _userManager.GetUserIdAsync(user);
-				newItem.ApplicationUserId = await _userManager.GetUserIdAsync(user);
+				newItem.ApplicationUserId = userId;
 				_context.Items.Add(newItem);
 				_context.SaveChanges();
 

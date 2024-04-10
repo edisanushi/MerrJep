@@ -1,9 +1,11 @@
 using MerrJep.Models;
 using MerrJepData;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MerrJep.Controllers
 {
@@ -11,38 +13,37 @@ namespace MerrJep.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly ApplicationDbContext _context;
 
-		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
 		{
 			_context = context;
 			_logger = logger;
+			_userManager = userManager;
 		}
 
-		public IActionResult Index(int? currentPage)
+		public async Task<IActionResult> Index(int? currentPage)
 		{
 			int itemsPerPage = 9;
 			if (currentPage == null || currentPage < 1)
 			{
 				currentPage = 1;
 			}
-			//double total = _context.Items.Where(x => x.AvailableQuantity > 0).Count();
-			double nrOfPages = 10;
-			//double nrOfPages = Math.Ceiling(total / itemsPerPage);
-			if(currentPage > nrOfPages)
+			var user = await _userManager.GetUserAsync(User);
+			var userId = await _userManager.GetUserIdAsync(user);
+			double total = _context.Items.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId).Count();
+			double nrOfPages = Math.Ceiling(total / itemsPerPage);
+			var offset = Convert.ToInt32((currentPage - 1) * itemsPerPage);
+			if (currentPage > nrOfPages)
 				currentPage = Convert.ToInt32(nrOfPages);
 			var itemsList = _context.Items
-				.Where(x => x.AvailableQuantity > 0)
+				.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId)
 				.Include(x => x.Images).OrderByDescending(x => x.DateAdded)
-				.Skip(0)
-				.Take(9).ToList();
+				.Skip(offset)
+				.Take(itemsPerPage).ToList();
 			ViewBag.CurrentPage = currentPage;
-			ViewBag.TotalPages = 10;
-			//var itemsList = _context.Items
-			//	.Where(x => x.AvailableQuantity > 0)
-			//	.Include(x => x.Images).OrderByDescending(x => x.DateAdded)
-			//	.Skip((pageNumber-1)*itemsPerPage)
-			//	.Take(itemsPerPage).ToList();
+			ViewBag.TotalPages = nrOfPages;
 			return View(itemsList);
 		}
 
