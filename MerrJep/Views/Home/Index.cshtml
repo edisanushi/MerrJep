@@ -9,6 +9,13 @@
 	li.page-item:hover {
 		cursor: pointer;
 	}
+
+	#backgroundImgDiv {
+		background-image: url('@Url.Content("~/assets/images/bg/05.jpg")');
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
 </style>
 
 
@@ -16,7 +23,7 @@
 
 	<section class="pt-0">
 		<div class="container">
-			<div class="rounded-3 p-3 p-sm-5" style="background-image: url(assets/images/bg/05.jpg); background-position: center center; background-repeat: no-repeat; background-size: cover;">
+			<div class="rounded-3 p-3 p-sm-5" id = "backgroundImgDiv">
 				<div class="row my-2 my-xl-5">
 					<div class="col-md-8 mx-auto">
 						<h1 class="text-center text-white">150 Hotels in New York</h1>
@@ -80,22 +87,23 @@
 							}
 							<div class="card-body px-3 pb-0">
 								<div class="d-flex justify-content-between mb-3">
-									<a href="#" class="badge bg-dark text-white"><i class="bi fa-fw bi-star-fill me-2 text-warning"></i>4.5</a>
-									<a href="#" class="h6 mb-0 z-index-2"><i class="bi fa-fw bi-bookmark"></i></a>
+									@* <a href="#" class="badge bg-dark text-white"><i class="bi fa-fw bi-star-fill me-2 text-warning"></i>4.5</a> *@
+									<span href="#" class="h6 mb-0 z-index-2">@item.DateAdded</span>
 								</div>
 								<h5 class="card-title"><a href="hotel-detail.html">@item.Name</a></h5>
-								<ul class="nav nav-divider mb-2 mb-sm-3">
+								<p>@item.ApplicationUser.FirstName @item.ApplicationUser.LastName</p>
+								@* <ul class="nav nav-divider mb-2 mb-sm-3">
 									<li class="nav-item">Air Conditioning</li>
 									<li class="nav-item">Wifi</li>
 									<li class="nav-item">Kitchen</li>
 									<li class="nav-item">Pool</li>
-								</ul>
+								</ul> *@
 							</div>
 							<div class="card-footer pt-0">
 								<div class="d-sm-flex justify-content-sm-between align-items-center">
 									<div class="d-flex align-items-center">
 										<h5 class="fw-normal text-success mb-0 me-1">@item.Price</h5>
-										<span class="mb-0 me-2">/day</span>
+										<span class="mb-0 me-2">@item.Currency.Name</span>
 										@* <span class="text-decoration-line-through">$1000</span> *@
 									</div>
 									<div class="mt-2 mt-sm-0">

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<MerrJepData.Currency>
+@{
 	ViewData["Title"] = "Shto Artikull";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -42,16 +43,28 @@
 										<label class="error_label emri_error_label" style="display: none"></label>
 									</div>
 
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<label class="form-label">Sasia<span style="color: red">*</span></label>
 										<input class="form-control" id="Sasia" type="text" placeholder="Vendosni sasine e gjendjes se artikullit">
 										<label class="error_label sasia_error_label" style="display: none"></label>
 									</div>
 
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<label class="form-label">Cmimi<span style="color: red">*</span></label>
 										<input class="form-control" id="Cmimi" type="email" placeholder="Vendosni cmimin e artikullit">
 										<label class="error_label cmimi_error_label" style="display: none"></label>
+									</div>
+
+									<div class="col-md-4">
+										<label class="form-label">Monedha</label>
+										<select id="currencyCode" class="form-select js-choice">
+											<option value="0">Zgjidhni monedhen</option>
+											@foreach(var currency in Model)
+											{
+												<option value="@currency.Code">@currency.Name</option>
+											}
+										</select>
+										<label class="error_label currency_error_label" style="display: none"></label>
 									</div>
 
 
@@ -63,7 +76,7 @@
 
 									<div class="col-12" id="main-photo">
 										<label class="form-label">Ngarkoni foton kryesore te artikullit <span style="color: red">*</span></label>
-										<div class="dropzone dropzone-custom" id="mainPhotoDropzone" data-dropzone='{autoProcessQueue: false, maxFiles": 1, "addRemoveLinks": false}'>
+										<div class="dropzone dropzone-custom" id="mainPhotoDropzone" data-dropzone='{"autoProcessQueue": false, "maxFiles": 1, "addRemoveLinks": false}'>
 											<div class="dz-message needsclick">
 												<i class="bi bi-upload display-3"></i>
 												<p>Klikoni ketu per te ngarkuar foto</p>
@@ -91,7 +104,7 @@
 
 									<div class="col-12" id="additional-photos">
 										<label class="form-label">Opsionale - Ngarkoni foto te tjera plotesuese per artikullin (Maksimumi 3)</label>
-										<div class="dropzone dropzone-custom" id="additionalPhotoDropzone" data-dropzone='{autoProcessQueue: false, "maxFiles": 3, "addRemoveLinks": false}'>
+										<div class="dropzone dropzone-custom" id="additionalPhotoDropzone" data-dropzone='{"autoProcessQueue": false, "maxFiles": 3, "addRemoveLinks": false}'>
 											<div class="dz-message needsclick">
 												<i class="bi bi-upload display-3"></i>
 												<p>Klikoni ketu per te ngarkuar foto</p>
@@ -142,6 +155,7 @@
 		var emri = $("#Emri").val();
 		var sasia = $("#Sasia").val();
 		var cmimi = $("#Cmimi").val();
+		var currency = $('#currencyCode').val();
 		var pershkrimi = $("#Pershkrimi").val();
 		var thumbnail = getFilesFromDropzone("mainPhotoDropzone");
 		var images = getFilesFromDropzone("additionalPhotoDropzone");
@@ -151,7 +165,8 @@
 			AvailableQuantity: sasia,
 			Price: cmimi,
 			Description: pershkrimi,
-			Thumbnail: thumbnail
+			Thumbnail: thumbnail,
+			CurrencyCode: currency
 		}
 		if (checkFormIsValid(obj)) {
 			const button = document.getElementById('submit-item');
@@ -163,7 +178,8 @@
 				AvailableQuantity: sasia,
 				Price: cmimi,
 				Description: pershkrimi,
-				Thumbnail: thumbnail[0]
+				Thumbnail: thumbnail[0],
+				CurrencyCode: currency
 			}
 			SubmitForm(data);
 		}
@@ -265,11 +281,20 @@
 				$(".addImage_error_label").css("display", "none");
 			});
 		}
+		if (obj.CurrencyCode == 0){
+			$(".currency_error_label").html("Ju lutem zgjidhni monedhen");
+			$(".currency_error_label").css("display", "block");
+			isValid = false;
+		}
 		return isValid;
 	}
 
 	$("input").keyup(function () {
 		$(this).siblings("label.error_label").html("");
+	});
+
+	$("select").on("change", function () { 
+		$("div.choices").siblings("label.error_label").html("");
 	});
 
 	$("textarea").keyup(function () {

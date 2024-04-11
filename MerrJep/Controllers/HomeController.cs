@@ -39,7 +39,10 @@ namespace MerrJep.Controllers
 				currentPage = Convert.ToInt32(nrOfPages);
 			var itemsList = _context.Items
 				.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId)
-				.Include(x => x.Images).OrderByDescending(x => x.DateAdded)
+				.Include(x => x.Images)
+				.Include(x => x.ApplicationUser)
+				.Include(x => x.Currency)
+				.OrderByDescending(x => x.DateAdded)
 				.Skip(offset)
 				.Take(itemsPerPage).ToList();
 			ViewBag.CurrentPage = currentPage;

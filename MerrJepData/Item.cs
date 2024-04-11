@@ -22,5 +22,7 @@ namespace MerrJepData
 		public string ApplicationUserId { get; set; }
 		public virtual ApplicationUser ApplicationUser { get; set; }
 		public ICollection<Image> Images { get; set; }
+		public int CurrencyId { get; set; }
+		public virtual Currency Currency { get; set; }
 	}
 }

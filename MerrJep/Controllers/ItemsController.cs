@@ -1,5 +1,6 @@
 ﻿using MerrJep.ViewModels;
 using MerrJepData;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +22,8 @@ namespace MerrJep.Controllers
 		[HttpGet]
 		public IActionResult AddItem()
 		{
-			return View();
+			var currencies = _context.Currencies.ToList();
+			return View(currencies);
 		}
 
 		[HttpPost]
@@ -38,6 +40,7 @@ namespace MerrJep.Controllers
 				var user = await _userManager.GetUserAsync(User);
 				var userId = await _userManager.GetUserIdAsync(user);
 				newItem.ApplicationUserId = userId;
+				newItem.CurrencyId = _context.Currencies.Where(x => x.Code == item.CurrencyCode).Select(x => x.Id).FirstOrDefault();
 				_context.Items.Add(newItem);
 				_context.SaveChanges();
 

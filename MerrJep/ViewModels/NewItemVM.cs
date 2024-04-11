@@ -11,6 +11,7 @@
 		public List<ImageObj> Images { get; set; }
 		//public List<IFormFile> Images { get; set; }
 		public string UserId { get; set; }
+		public string CurrencyCode { get; set; }
 	}
 
 	public class ImageObj
