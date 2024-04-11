@@ -3,6 +3,7 @@ using MerrJepData;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MerrJep.Controllers
 {
@@ -75,6 +76,19 @@ namespace MerrJep.Controllers
 		public IActionResult ItemAdded()
 		{
 			return View();
+		}
+
+
+		public IActionResult Details (int id)
+		{
+			var itemDetails = new ItemDetailsVM();
+			itemDetails.Item = _context.Items
+				.Where(x => x.Id == id)
+				.Include(x => x.Images)
+				.Include(x => x.ApplicationUser)
+				.Include(x => x.Currency).FirstOrDefault();
+			itemDetails.Currencies = _context.Currencies.ToList();
+			return View(itemDetails);
 		}
 	}
 }
