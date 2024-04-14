@@ -12,13 +12,18 @@ namespace MerrJep.Controllers
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IUserStore<ApplicationUser> _userStore;
 		private readonly IUserEmailStore<ApplicationUser> _emailStore;
+		private readonly ApplicationDbContext _context;
 
-		public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore)
+		public AccountController(SignInManager<ApplicationUser> signInManager, 
+			UserManager<ApplicationUser> userManager, 
+			IUserStore<ApplicationUser> userStore,
+			ApplicationDbContext context)
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
 			_userStore = userStore;
 			_emailStore = GetEmailStore();
+			_context = context;
 		}
 		public string ReturnUrl { get; set; }
 		[TempData]
@@ -124,5 +129,7 @@ namespace MerrJep.Controllers
 			await _signInManager.SignOutAsync();
 			return RedirectToAction("Account", "Login");
 		}
+
+		
 	}
 }

@@ -12,5 +12,6 @@ namespace MerrJepData
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public ICollection<Item> Items { get; set; }
+		public ICollection<Cart> Carts { get; set; }
 	}
 }

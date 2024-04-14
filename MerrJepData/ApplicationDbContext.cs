@@ -22,5 +22,6 @@ namespace MerrJepData
 		public DbSet<Item> Items { get; set; } 
 		public DbSet<Image> Images { get; set; }
 		public DbSet<Currency> Currencies { get; set; }
+		public DbSet<Cart> Carts { get; set; }
 	}
 }
