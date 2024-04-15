@@ -8,6 +8,14 @@
 	.error_label {
 		color: red;
 	}
+
+	.vh-xxl-100 {
+		padding-top: 2rem !important;
+	}
+
+	i.fakepasswordconfirmicon {
+		cursor: pointer !important;
+	}
 </style>
 
 <main>
@@ -32,8 +40,8 @@
 							<div class="col-lg-6 order-1">
 								<div class="p-4 p-sm-6">
 
-									<a href="index.html">
-										<img class="h-50px mb-4" src="~/assets/images/logo-icon.svg" alt="logo">
+									<a asp-area="" asp-controller="Home" asp-action="Index">
+										<img class="h-50px mb-4" src="~/assets/images/wave-logo.png" alt="logo">
 									</a>
 
 									<h1 class="mb-2 h3">Krijoni nje llogari të re</h1>
@@ -68,16 +76,15 @@
 											<label class="error_label password_error_label" style="display: none"></label>
 										</div>
 
-										<div class="mb-3">
+										<div class="mb-3 position-relative">
 											<label class="form-label">Konfirmo Fjalëkalimin</label>
-											<input type="password" class="form-control" id="KonfirmoFjalekalim">
+											<input type="password" class="form-control fakepasswordconfirm" id="KonfirmoFjalekalim">
+											<span class="position-absolute top-50 end-0 translate-middle-y p-0 mt-3">
+												<i class="fakepasswordconfirmicon fas fa-eye-slash cursor-pointer p-2"></i>
+											</span>
 											<label class="error_label confirmPassword_error_label" style="display: none"></label>
 										</div>
 
-										<div class="mb-3">
-											<input type="checkbox" class="form-check-input" id="rememberCheck">
-											<label class="form-check-label" for="rememberCheck">Keep me signed in</label>
-										</div>
 										<div><button id="submit-register" type="submit" class="btn btn-primary w-100 mb-0">Regjistrohu</button></div>
 										<label class="error_label register_error_label" style="display: none"></label>
 									</div>
@@ -196,5 +203,15 @@
 		$(this).siblings("label.error_label").html("");
 	});
 	
+
+	$(".fakepasswordconfirmicon").click(function(){
+		$(this).toggleClass("fa-eye-slash fa-eye");
+		if($(".fakepasswordconfirm").attr("type") == "password"){
+			$(".fakepasswordconfirm").attr("type", "text");
+		}
+		else{
+			$(".fakepasswordconfirm").attr("type", "password");
+		}
+	})
 
 </script>

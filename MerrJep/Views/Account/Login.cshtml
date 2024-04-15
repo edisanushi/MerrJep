@@ -7,6 +7,10 @@
 	.error_label {
 		color: red;
 	}
+
+	.vh-xxl-100 {
+		padding-top: 2rem !important;
+	}
 </style>
 
 <main>
@@ -31,8 +35,8 @@
 						<div class="col-lg-6 order-1">
 							<div class="p-4 p-sm-7">
 							
-								<a href="index.html">
-									<img class="h-50px mb-4" src="~/assets/images/logo-icon.svg" alt="logo">
+								<a asp-area="" asp-controller="Home" asp-action="Index">
+									<img class="h-50px mb-4" src="~/assets/images/wave-logo.png" alt="logo">
 								</a>
 							
 								<h1 class="mb-2 h3">Mirë se erdhe!</h1>
@@ -54,14 +58,6 @@
 											<i class="fakepasswordicon fas fa-eye-slash cursor-pointer p-2"></i>
 										</span>
 										<label class="error_label password_error_label" style="display: none"></label>
-									</div>
-								
-									<div class="mb-3 d-sm-flex justify-content-between">
-										<div>
-											<input type="checkbox" class="form-check-input" id="rememberCheck">
-											<label class="form-check-label" for="rememberCheck">Remember me?</label>
-										</div>
-										<a href="forgot-password.html">Forgot password?</a>
 									</div>
 										<div><button type="submit" class="btn btn-primary w-100 mb-0" id="submit-login">Hyr</button></div>
 										<label class="error_label login_error_label" style="display: none"></label>
