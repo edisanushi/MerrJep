@@ -110,11 +110,6 @@
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img class="light-mode-item navbar-brand-item" src="~/assets/images/wave-logo.png" alt="logo">
                 </a>
-                
-               
-
-                
-               
 
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
@@ -126,104 +121,62 @@
                         </span>
                         <span class="d-none d-sm-inline-block small">Menu</span>
                     </button>
-
                     <div class="navbar-collapse collapse" id="navbarCollapse">
                         <ul class="navbar-nav navbar-nav-scroll me-auto">
                             <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Items" asp-action="ManageItems">Menaxho artikujt</a></li>
                             <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Items" asp-action="AddItem">Shto Artikull</a></li>
                         </ul>
                     </div>
-                }
-                <button class="navbar-toggler ms-sm-auto mx-3 me-md-0 p-0 p-sm-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategoryCollapse" aria-controls="navbarCategoryCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <img style="width: 50px !important" src="~/assets/images/profile-icon.png" />
-                </button>
-                <div class="navbar-collapse collapse" id="navbarCategoryCollapse">
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <ul class="nav flex-row align-items-center list-unstyled ms-xl-auto">
-                            <li class="nav-item ms-3 dropdown">
-                                <a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="avatar-img rounded-2" src="~/assets/images/avatar/01.jpg" alt="avatar">
-                                </a>
 
-                                <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" aria-labelledby="profileDropdown">
-                                    <li class="px-3 mb-3">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar me-3">
-                                                <img class="avatar-img rounded-circle shadow" src="~/assets/images/avatar/01.jpg" alt="avatar">
-                                            </div>
-                                            <div>
-                                                <a class="h6 mt-2 mt-sm-0" href="#">Lori Ferguson</a>
-                                                <p class="small m-0">example@gmail.com</p>
-                                            </div>
+                    <ul class="nav flex-row align-items-center list-unstyled ms-xl-auto">
+                        <li class="nav-item ms-3 dropdown">
+                            <a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img class="avatar-img rounded-2" src="~/assets/images/profile-icon.png" alt="avatar">
+                            </a>
+                            <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" aria-labelledby="profileDropdown">
+                                <li class="px-3 mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3">
+                                            <img class="avatar-img rounded-circle shadow" src="~/assets/images/profile-icon.png" alt="avatar">
                                         </div>
-                                    </li>
+                                        <div>
+                                            <a class="h6 mt-2 mt-sm-0" href="#">Lori Ferguson</a>
+                                            <p class="small m-0">example@gmail.com</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li> <hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Cart" asp-action="GetUserCart"><i class="bi bi-heart fa-fw me-2"></i>Shporta Ime</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-check fa-fw me-2"></i>Porosite e mia</a></li>
+                                <li>
+                                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                        <button type="submit" class="dropdown-item bg-danger-soft-hover"><i class="bi bi-power fa-fw me-2"></i>Dil</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <button class="navbar-toggler ms-sm-auto mx-3 me-md-0 p-0 p-sm-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategoryCollapse" aria-controls="navbarCategoryCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <img style="width: 50px !important" src="~/assets/images/profile-icon.png" />
+                    </button>
 
-                                    <li> <hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Cart" asp-action="GetUserCart"><i class="bi bi-heart fa-fw me-2"></i>Shporta Ime</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-check fa-fw me-2"></i>Porosite e mia</a></li>
-                                    <li>
-                                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
-                                            <button type="submit" class="dropdown-item bg-danger-soft-hover"><i class="bi bi-power fa-fw me-2"></i>Dil</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
-                    else
-                    {
+                    <div class="navbar-collapse collapse" id="navbarCategoryCollapse">
                         <ul class="navbar-nav navbar-nav-scroll nav-pills-primary-soft text-center ms-auto p-2 p-xl-0">
                             <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Hyr</a> </li>
                             <li class="nav-item"> <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Regjistrohu</a></li>
                         </ul>
-                    }
-                </div>
-                        
-                   
+                    </div>
+                }
                 
-               
-
             </div>
         </nav>
     </header>
     @RenderBody()
 
     <div class="back-top"></div>
-
-    <div class="navbar navbar-mobile">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active" href="index.html">
-                    <i class="bi bi-house-door fa-fw"></i>
-                    <span class="mb-0 nav-text">Home</span>
-                </a>
-            </li>
-
- 
-            <li class="nav-item">
-                <a class="nav-link" href="account-bookings.html">
-                    <i class="bi bi-briefcase fa-fw"></i>
-                    <span class="mb-0 nav-text">My Trips</span>
-                </a>
-            </li>
-
-         
-            <li class="nav-item">
-                <a class="nav-link" href="offer-detail.html">
-                    <i class="bi bi-percent fa-fw"></i>
-                    <span class="mb-0 nav-text">Offer</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="account-profile.html">
-                    <i class="bi bi-person-circle fa-fw"></i>
-                    <span class="mb-0 nav-text">Account</span>
-                </a>
-            </li>
-        </ul>
-    </div>
 
 
     <script src="~/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
