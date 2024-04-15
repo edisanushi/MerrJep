@@ -34,9 +34,11 @@ namespace MerrJep.Controllers
 			var userId = await _userManager.GetUserIdAsync(user);
 			double total = _context.Items.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId).Count();
 			double nrOfPages = Math.Ceiling(total / itemsPerPage);
-			var offset = Convert.ToInt32((currentPage - 1) * itemsPerPage);
-			if (currentPage > nrOfPages)
+			if(currentPage > nrOfPages)
+			{
 				currentPage = Convert.ToInt32(nrOfPages);
+			}
+			var offset = Convert.ToInt32((currentPage - 1) * itemsPerPage);
 			var itemsList = _context.Items
 				.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId)
 				.Include(x => x.Images)

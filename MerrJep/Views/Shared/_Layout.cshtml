@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@using MerrJepData;
+@inject UserManager<ApplicationUser> _userManager;
+@{
+    var loggedInUser = new ApplicationUser();
+    loggedInUser = _userManager.Users?.FirstOrDefault(x => x.UserName == User.Identity!.Name);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,65 +20,6 @@
     <script src="~/assets/vendor/glightbox/js/glightbox.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/lib/toastr/toastr.js"></script>
-    <script>
-        const storedTheme = localStorage.getItem('theme')
-
-        const getPreferredTheme = () => {
-            if (storedTheme) {
-                return storedTheme
-            }
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-
-        const setTheme = function (theme) {
-            if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.setAttribute('data-bs-theme', 'dark')
-            } else {
-                document.documentElement.setAttribute('data-bs-theme', theme)
-            }
-        }
-
-        setTheme(getPreferredTheme())
-
-        window.addEventListener('DOMContentLoaded', () => {
-            var el = document.querySelector('.theme-icon-active');
-            if (el != 'undefined' && el != null) {
-                const showActiveTheme = theme => {
-                    const activeThemeIcon = document.querySelector('.theme-icon-active use')
-                    const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
-                    const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
-
-                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
-                        element.classList.remove('active')
-                    })
-
-                    btnToActive.classList.add('active')
-                    activeThemeIcon.setAttribute('href', svgOfActiveBtn)
-                }
-
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-                    if (storedTheme !== 'light' || storedTheme !== 'dark') {
-                        setTheme(getPreferredTheme())
-                    }
-                })
-
-                showActiveTheme(getPreferredTheme())
-
-                document.querySelectorAll('[data-bs-theme-value]')
-                    .forEach(toggle => {
-                        toggle.addEventListener('click', () => {
-                            const theme = toggle.getAttribute('data-bs-theme-value')
-                            localStorage.setItem('theme', theme)
-                            setTheme(theme)
-                            showActiveTheme(theme)
-                        })
-                    })
-
-            }
-        })
-
-    </script>
-
 
     <link rel="shortcut icon" href="~/assets/images/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -140,8 +88,8 @@
                                             <img class="avatar-img rounded-circle shadow" src="~/assets/images/profile-icon.png" alt="avatar">
                                         </div>
                                         <div>
-                                            <a class="h6 mt-2 mt-sm-0" href="#">Lori Ferguson</a>
-                                            <p class="small m-0">example@gmail.com</p>
+                                            <a class="h6 mt-2 mt-sm-0" href="#">@loggedInUser.FirstName @loggedInUser.LastName</a>
+                                            <p class="small m-0">@loggedInUser.Email</p>
                                         </div>
                                     </div>
                                 </li>
