@@ -2,6 +2,7 @@
 using MerrJepData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
 
 namespace MerrJep.Controllers
@@ -52,6 +53,14 @@ namespace MerrJep.Controllers
 					newCartItem.Ordered = 20;
 					await _context.Carts.AddAsync(newCartItem);
 					await _context.SaveChangesAsync();
+
+					var item = await _context.Items.Where(x => x.Id == vm.ItemId).FirstOrDefaultAsync();
+					if(item == null) {
+						return Json("false");
+					}
+					item.AvailableQuantity -= vm.Amount;
+					await _context.SaveChangesAsync();
+
 					return Json("true");
 				}
 				return Json("false");

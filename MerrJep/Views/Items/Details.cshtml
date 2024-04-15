@@ -75,13 +75,16 @@
 							</div>
 							<div class="card-footer p-0 pt-4">
 								<div class="hstack gap-3 flex-wrap">
-									<button id="addToCart" class="bg-success bg-opacity-10 text-success fw-light rounded-2 d-inline-block mb-0 py-2 px-4">
+
+									<div class="hstack gap-1 align-items-center">
+										<button type="button" class="btn btn-link remove-btn p-0 mb-0"><i class="bi bi-dash-circle fs-5 fa-fw"></i></button>
+										<h6 class="amount mb-0">0</h6>
+										<button type="button" class="btn btn-link add-btn p-0 mb-0"><i class="bi bi-plus-circle fs-5 fa-fw"></i></button>
+									</div>
+
+									<button id="addToCart" class="btn btn-sm btn-primary-soft mb-0">
 										Shto ne shporte
 									</button>
-
-									<h6 class="bg-success bg-opacity-10 text-success fw-light rounded-2 d-inline-block mb-0 py-2 px-4">
-										Shto tek lista e deshirave
-									</h6>
 								</div>
 							</div>
 						</div>
@@ -144,7 +147,7 @@
 				<aside class="col-xl-4">
 					<div data-sticky data-margin-top="80" data-sticky-for="1199">
 						<div class="card card-body bg-light p-4">
-							<h6 class="text-danger fw-normal">Porosit menjehere</h6>
+							<h6 class="text-success fw-normal">Porosit tani</h6>
 
 							<ul class="list-group list-group-borderless mb-0">
 								<li class="list-group-item d-flex justify-content-between">
@@ -191,29 +194,66 @@
 <script>
 	$(document).ready(function (){
 
-		var obj = {
-			ItemId: '@Model.Item.Id',
-			Amount: `@Model.Item.AvailableQuantity`
+		toastr.options = {
+			'closeButton': true,
+			'debug': false,
+			'newestOnTop': false,
+			'progressBar': false,
+			'positionClass': 'toast-top-right',
+			'preventDuplicates': false,
+			'showDuration': '3000',
+			'hideDuration': '3000',
+			'timeOut': '3000',
+			'extendedTimeOut': '3000',
+			'showEasing': 'swing',
+			'hideEasing': 'linear',
+			'showMethod': 'fadeIn',
+			'hideMethod': 'fadeOut',
 		}
 
 		$("#addToCart").click(function() {
+			var obj = {
+				ItemId: '@Model.Item.Id',
+				Amount: parseInt($(".amount").html())
+			}
 			$.ajax({
 				url: "/Cart/AddItemToCart",
 				method: "POST",
 				data: obj,
 				success: function (data) {
-					if (data.valid == "true") {
-						console.log("Shtimi ne shporte u be me sukses")
+					if (data == "true") {
+						toastr.success("Shtimi ne shporte u be me sukses")
 					}
 					else {
-						console.log("Ndodhi nje gabim gjate shtimit ne shporte")
+						toastr.error("Ndodhi nje gabim gjate shtimit ne shporte")
 					}
 				},
 				error: function (err) {
-					console.log("Ndodhi nje gabim gjate shtimit ne shporte")
+					toastr.error("Ndodhi nje gabim gjate shtimit ne shporte")
 				}
 			});
 		})
+
+		$(".remove-btn").click(function () {
+			var currentNr = parseInt($(".amount").html());
+			if(currentNr > 0){
+				$(".amount").html(currentNr - 1);
+			}
+			else {
+				$(".amount").html(currentNr);
+			}
+		})
+
+		$(".add-btn").click(function () {
+			var currentNr = parseInt($(".amount").html())
+			if (currentNr < '@Model.Item.AvailableQuantity') {
+				$(".amount").html(currentNr + 1);
+			}
+			else {
+				$(".amount").html(currentNr);
+			}
+		})
+
 	})
 
 </script>
