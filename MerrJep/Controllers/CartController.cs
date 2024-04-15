@@ -25,10 +25,22 @@ namespace MerrJep.Controllers
 			var userId = await _userManager.GetUserIdAsync(user);
 			if (userId != null)
 			{
-				var cartItems = _context.Carts.Where(x => x.ApplicationUserId == userId
+				var vm = new List<CartVM>();
+				List<Cart> cartItems = await _context.Carts.Where(x => x.ApplicationUserId == userId
 					 && x.Invalidated == 20)
-					.ToList();
-				return View("Cart", cartItems);
+					.ToListAsync();
+				foreach(var cart in cartItems)
+				{
+					vm.Add(new CartVM
+					{
+						Cart = cart,
+						Item = _context.Items.Where(x => x.Id == cart.ItemId)
+											 .Include(x => x.ApplicationUser)
+											 .Include(x => x.Images)
+											 .Include(x => x.Currency).SingleOrDefault()
+					});
+				}
+				return View("Cart", vm);
 			}
 			return RedirectToAction("Home", "Index");
 		}
