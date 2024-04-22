@@ -1,7 +1,7 @@
 ﻿@model List<MerrJep.ViewModels.CartVM>
 
 @{
-	ViewData["Title"] = "Kryefaqja";
+	ViewData["Title"] = "Shporta Ime";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,213 +12,67 @@
 		<div class="container">
 
 			<div class="row">
-
-
-
-				<!-- Sidebar START -->
-
-				@* <div class="col-lg-4 col-xl-3">
-
-					<!-- Responsive offcanvas body START -->
-
-					<div class="offcanvas-lg offcanvas-end" tabindex="-1" id="offcanvasSidebar">
-
-						<!-- Offcanvas header -->
-
-						<div class="offcanvas-header justify-content-end pb-2">
-
-							<button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasSidebar" aria-label="Close"></button>
-
-						</div>
-
-
-
-						<!-- Offcanvas body -->
-
-						<div class="offcanvas-body p-3 p-lg-0">
-
-							<div class="card bg-light w-100">
-
-
-
-								<!-- Edit profile button -->
-
-								<div class="position-absolute top-0 end-0 p-3">
-
-									<a href="#" class="text-primary-hover" data-bs-toggle="tooltip" data-bs-title="Edit profile">
-
-										<i class="bi bi-pencil-square"></i>
-
-									</a>
-
-								</div>
-
-
-
-								<!-- Card body START -->
-
-								<div class="card-body p-3">
-
-									<!-- Avatar and content -->
-
-									<div class="text-center mb-3">
-
-										<!-- Avatar -->
-
-										<div class="avatar avatar-xl mb-2">
-
-											<img class="avatar-img rounded-circle border border-2 border-white" src="assets/images/avatar/01.jpg" alt="">
-
-										</div>
-
-										<h6 class="mb-0">Jacqueline Miller</h6>
-
-										<a href="#" class="text-reset text-primary-hover small">hello@gmail.com</a>
-
-										<hr>
-
-									</div>
-
-
-
-									<!-- Sidebar menu item START -->
-
-									<ul class="nav nav-pills-primary-soft flex-column">
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-profile.html"><i class="bi bi-person fa-fw me-2"></i>My Profile</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-bookings.html"><i class="bi bi-ticket-perforated fa-fw me-2"></i>My Bookings</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-travelers.html"><i class="bi bi-people fa-fw me-2"></i>Travelers</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-payment-details.html"><i class="bi bi-wallet fa-fw me-2"></i>Payment Details</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link active" href="account-wishlist.html"><i class="bi bi-heart fa-fw me-2"></i>Wishlist</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-settings.html"><i class="bi bi-gear fa-fw me-2"></i>Settings</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link" href="account-delete.html"><i class="bi bi-trash fa-fw me-2"></i>Delete Profile</a>
-
-										</li>
-
-										<li class="nav-item">
-
-											<a class="nav-link text-danger bg-danger-soft-hover" href="#"><i class="fas fa-sign-out-alt fa-fw me-2"></i>Sign Out</a>
-
-										</li>
-
-									</ul>
-
-									<!-- Sidebar menu item END -->
-
-								</div>
-
-								<!-- Card body END -->
-
-							</div>
-
-						</div>
-
-					</div>
-
-					<!-- Responsive offcanvas body END -->
-
-				</div> *@
-
-				<!-- Sidebar END -->
-				<!-- Main content START -->
-
 				<div class="col-lg-8 col-xl-8">
-
-
-
-					<!-- Offcanvas menu button -->
-
-					<div class="d-grid mb-0 d-lg-none w-100">
-
-						<button class="btn btn-primary mb-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-
-							<i class="fas fa-sliders-h"></i> Menu
-
-						</button>
-
-					</div>
 					<div class="card border bg-transparent">
 						<div class="card-header bg-transparent border-bottom">
 							<h4 class="card-header-title">Shporta Ime</h4>
 						</div>
 						<div class="card-body vstack gap-4">
-							<div class="d-flex justify-content-between">
-								<button class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Hiq te gjitha</button>
-							</div>
-							@foreach(var cart in Model)
+							@if (Model.Count > 0)
 							{
-								<div class="card shadow p-2">
-									<div class="row g-0">
-										<div class="col-md-3">
-											@{
-												var image = cart.Item.Images.Where(x => x.IsMainImage == 1).First();
-												var imgBase64 = Convert.ToBase64String(image.ImageByte);
-												var imgNameParts = image.ImageName.Split('.');
-												var imgExtension = imgNameParts[imgNameParts.Length - 1];
-												var imageName = imgNameParts[0];
-												for (int i = 1; i < imgNameParts.Length - 1; i++)
-												{
-													imageName += '.' + imgNameParts[i];
+								<div class="d-flex justify-content-between">
+									<button id="deleteAll" class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Hiq te gjitha</button>
+								</div>
+								@foreach (var cart in Model)
+								{
+									<div class="card shadow p-2">
+										<div class="row g-0">
+											<div class="col-md-3">
+												@{
+													var image = cart.Item.Images.Where(x => x.IsMainImage == 1).First();
+													var imgBase64 = Convert.ToBase64String(image.ImageByte);
+													var imgNameParts = image.ImageName.Split('.');
+													var imgExtension = imgNameParts[imgNameParts.Length - 1];
+													var imageName = imgNameParts[0];
+													for (int i = 1; i < imgNameParts.Length - 1; i++)
+													{
+														imageName += '.' + imgNameParts[i];
+													}
 												}
-											}
-											<img src="data:image/@imgExtension;base64,@imgBase64" class="card-img rounded-2" alt="Card image">
-										</div>
-										<div class="col-md-9">
-											<div class="card-body py-md-2 d-flex flex-column h-100">
-												<div class="d-flex justify-content-between align-items-center">
-													<h5 class="card-title mb-1"><a href="hotel-detail.html">@cart.Item.Name</a></h5>
-													<ul class="list-inline mb-0">
-														<li class="list-inline-item">
-															<a href="#" class="btn btn-sm btn-round btn-danger mb-0"><i class="fa-solid fa-fw fa-trash"></i></a>
-														</li>
-													</ul>
-												</div>
-												<small>@cart.Item.ApplicationUser.FirstName @cart.Item.ApplicationUser.LastName / @cart.Item.DateAdded</small>
-												<div class="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
-													<div class="d-flex align-items-center">
-														<h5 class="fw-bold mb-0 me-1">@cart.Item.Price</h5>
-														<span class="mb-0 me-2">@cart.Item.Currency.Name</span>
+												<img src="data:image/@imgExtension;base64,@imgBase64" class="card-img rounded-2" alt="Card image">
+											</div>
+											<div class="col-md-9">
+												<div class="card-body py-md-2 d-flex flex-column h-100">
+													<div class="d-flex justify-content-between align-items-center">
+														<div>
+															<h5 class="card-title mb-1" style="display: inline">@cart.Item.Name</h5>
+															<span class="mb-0 me-2"> / @cart.Cart.AmountOfProduct</span>
+														</div>
+														<ul class="list-inline mb-0">
+															<li class="list-inline-item">
+																<button data-id="@cart.Item.Id" class="btn btn-sm btn-round btn-danger mb-0 btnDeleteItem"><i class="fa-solid fa-fw fa-trash"></i></button>
+															</li>
+														</ul>
 													</div>
-													<div class="mt-3 mt-sm-0">
-														<a asp-area="" asp-controller="Items" asp-action="Details" asp-route-id="@cart.Item.Id" class="btn btn-sm btn-dark w-100 mb-0">Shiko Detajet</a>
+													<small>@cart.Item.ApplicationUser.FirstName @cart.Item.ApplicationUser.LastName / @cart.Item.DateAdded</small>
+													<div class="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
+														<div class="d-flex align-items-center">
+															<h5 class="fw-bold mb-0 me-1">@cart.Item.Price</h5>
+															<span class="mb-0 me-2">@cart.Item.Currency.Name</span>
+														</div>
+														<div class="mt-3 mt-sm-0">
+															<a asp-area="" asp-controller="Items" asp-action="Details" asp-route-id="@cart.Item.Id" class="btn btn-sm btn-dark w-100 mb-0">Shiko Detajet</a>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								}
+							}
+							else
+							{
+								<p>Nuk ka artikuj ne shporte</p>
 							}
 						</div>
 					</div>
@@ -231,17 +85,23 @@
 								<h6 class="text-success fw-normal">Porosit tani</h6>
 
 								<ul class="list-group list-group-borderless mb-0">
-									<li class="list-group-item d-flex justify-content-between">
-										@{
-											double total = 0;
-										}
-										@foreach(var cart in Model)
-										{
-											total += cart.Item.Price;
-											<span class="h6 fw-light mb-0">Cmimi</span>
-											<span class="h6 fw-light mb-0">@cart.Item.Price @cart.Item.Currency.Name</span>
-										}
-									</li>
+									@{
+										double total = 0;
+									}
+									@foreach (var cart in Model)
+									{
+										var totalItemPrice = cart.Item.Price * cart.Cart.AmountOfProduct;
+										total += totalItemPrice;
+										<li class="list-group-item d-flex justify-content-between">
+											<div>
+												<span class="h6 fw-light mb-0">@cart.Item.Name</span>
+											</div>
+											<div>
+												<span class="h6 fw-light mb-0">@cart.Cart.AmountOfProduct X @cart.Item.Price => </span>
+												<span class="h6 fw-light mb-0">@totalItemPrice @cart.Item.Currency.Name</span>
+											</div>
+										</li>
+									}
 									<li class="list-group-item d-flex justify-content-between">
 										<span class="h6 fw-light mb-0">Zbritje (nuk aplikohet)</span>
 										<span class="h6 fw-light mb-0"> 0% </span>
@@ -263,19 +123,6 @@
 										<input class="form-check-input" type="radio" name="discountOptions" id="euro" value="option1" checked>
 										<label class="form-check-label h6 fw-normal mb-0" for="discount1">Paguaj ne Euro</label>
 									</div>
-									@* @foreach (var currency in Model.Currencies)
-									{
-										string IsChecked = "";
-										if (Model.Item.Currency.Code == currency.Code)
-										{
-											IsChecked = "checked";
-										}
-										<div class="form-check form-check-inline mb-0">
-											<input class="form-check-input" type="radio" name="discountOptions" id="@currency.Code" value="option1" @IsChecked>
-											<label class="form-check-label h6 fw-normal mb-0" for="discount1">Paguaj ne @currency.Name</label>
-										</div>
-									} *@
-
 									<a href="cab-booking.html" class="btn btn-dark mb-0 mt-2">Paguaj tani</a>
 								</div>
 							</div>
@@ -286,3 +133,63 @@
 		</div>
 	</section>
 </main>
+
+<script>
+	$(document).ready(function (){
+		toastr.options = {
+			'closeButton': true,
+			'debug': false,
+			'newestOnTop': false,
+			'progressBar': false,
+			'positionClass': 'toast-top-right',
+			'preventDuplicates': false,
+			'showDuration': '3000',
+			'hideDuration': '3000',
+			'timeOut': '3000',
+			'extendedTimeOut': '3000',
+			'showEasing': 'swing',
+			'hideEasing': 'linear',
+			'showMethod': 'fadeIn',
+			'hideMethod': 'fadeOut',
+		}
+		$(".btnDeleteItem").click(function () {
+			var itemId = $(this).attr("data-id")
+			console.log(itemId);
+			$.ajax({
+				url: "/Cart/DeleteItemFromCart?itemId=" + itemId,
+				method: "POST",
+				success: function (data) {
+					if (data == "true") {
+						toastr.success("Artikulli u hoq nga shporta")
+						window.location = "/Cart/GetUserCart";
+					}
+					else {
+						toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
+					}
+				},
+				error: function (err) {
+					toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
+				}
+			});
+		})
+
+
+		$("#deleteAll").click(function () {
+			$.ajax({
+				url: "/Cart/DeleteAllItemsFromCart",
+				method: "POST",
+				success: function (data) {
+					if (data == "true") {
+						toastr.success("Artikujt u hoq nga shporta")
+					}
+					else {
+						toastr.error("Ndodhi nje gabim gjate heqjes se artikujve")
+					}
+				},
+				error: function (err) {
+					toastr.error("Ndodhi nje gabim gjate heqjes se artikujve")
+				}
+			});
+		})
+	})
+</script>

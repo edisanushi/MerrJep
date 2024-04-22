@@ -3,6 +3,7 @@ using MerrJepData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.ComponentModel.Design;
 
 namespace MerrJep.Controllers
@@ -82,6 +83,41 @@ namespace MerrJep.Controllers
 				return Json("false");
 			}
 			
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteItemFromCart(int itemId)
+		{
+			var user = await _userManager.GetUserAsync(User);
+			var userId = await _userManager.GetUserIdAsync(user);
+			var cartItem = await _context.Carts.Where(x => x.ItemId == itemId && x.ApplicationUserId == userId && x.Invalidated == 20).FirstOrDefaultAsync();
+			if(cartItem == null)
+			{
+				return Json("false");
+			}
+			cartItem.Invalidated = 10;
+			await _context.SaveChangesAsync();
+			return Json("true");
+		}
+
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteAllItemsFromCart()
+		{
+			var user = await _userManager.GetUserAsync(User);
+			var userId = await _userManager.GetUserIdAsync(user);
+			var cartItems = await _context.Carts.Where(x => x.ApplicationUserId == userId && x.Invalidated == 20).ToListAsync();
+			if (cartItems == null)
+			{
+				return Json("false");
+			}
+			foreach(var item in cartItems)
+			{
+				item.Invalidated = 10;
+				await _context.SaveChangesAsync();
+			}
+			return Json("true");
 		}
 	}
 }

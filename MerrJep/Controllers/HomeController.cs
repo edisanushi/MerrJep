@@ -34,6 +34,9 @@ namespace MerrJep.Controllers
 			var userId = await _userManager.GetUserIdAsync(user);
 			double total = _context.Items.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId).Count();
 			double nrOfPages = Math.Ceiling(total / itemsPerPage);
+			if (nrOfPages == 0) {
+				nrOfPages = 1;
+			}
 			if(currentPage > nrOfPages)
 			{
 				currentPage = Convert.ToInt32(nrOfPages);
