@@ -79,8 +79,10 @@ namespace MerrJep.Controllers
 		}
 
 
-		public IActionResult Details (int id)
+		public async Task<IActionResult> Details (int id)
 		{
+			var user = await _userManager.GetUserAsync(User);
+			var userId = await _userManager.GetUserIdAsync(user);
 			var itemDetails = new ItemDetailsVM();
 			itemDetails.Item = _context.Items
 				.Where(x => x.Id == id)
@@ -88,6 +90,11 @@ namespace MerrJep.Controllers
 				.Include(x => x.ApplicationUser)
 				.Include(x => x.Currency).FirstOrDefault();
 			itemDetails.Currencies = _context.Currencies.ToList();
+			var addedToCart = false;
+			var existsInCart = _context.Carts.Where(x => x.ItemId == id && x.ApplicationUserId == userId && x.Invalidated == 20).ToList();
+			if (existsInCart.Count > 0)
+				addedToCart = true;
+			itemDetails.AddedToCart = addedToCart;
 			return View(itemDetails);
 		}
 	}

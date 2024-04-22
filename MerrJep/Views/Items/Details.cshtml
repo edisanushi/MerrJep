@@ -74,30 +74,31 @@
 								</div>
 							</div>
 							<div class="card-footer p-0 pt-4">
-								<div class="hstack gap-3 flex-wrap">
+								<div class="hstack gap-3 flex-wrap" id="cartStatus">
+									@if(Model.AddedToCart == false)
+									{
+										<div class="hstack gap-1 align-items-center">
+											<button type="button" class="btn btn-link remove-btn p-0 mb-0"><i class="bi bi-dash-circle fs-5 fa-fw"></i></button>
+											<h6 class="amount mb-0">1</h6>
+											<button type="button" class="btn btn-link add-btn p-0 mb-0"><i class="bi bi-plus-circle fs-5 fa-fw"></i></button>
+										</div>
 
-									<div class="hstack gap-1 align-items-center">
-										<button type="button" class="btn btn-link remove-btn p-0 mb-0"><i class="bi bi-dash-circle fs-5 fa-fw"></i></button>
-										<h6 class="amount mb-0">0</h6>
-										<button type="button" class="btn btn-link add-btn p-0 mb-0"><i class="bi bi-plus-circle fs-5 fa-fw"></i></button>
-									</div>
-
-									<button id="addToCart" class="btn btn-sm btn-primary-soft mb-0">
-										Shto ne shporte
-									</button>
+										<button id="addToCart" class="btn btn-sm btn-primary-soft mb-0">
+											Shto ne shporte
+										</button>
+									}
+									else
+									{
+										<div class="d-flex justify-content-between">
+											<button id="deleteFromCart" data-id="@Model.Item.Id" class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Hiq nga shporta</button>
+										</div>
+									}
 								</div>
 							</div>
 						</div>
 						
 						<div class="card bg-transparent">
-
-							<div class="card-header border-bottom bg-transparent px-0 pt-0">
-								<h4 class="mb-0">Pershkrimi i artikullit</h4>
-							</div>
-
 							<div class="card-body pt-4 p-0">
-								<p>@Model.Item.Description</p>
-
 								<h5>Te gjitha fotot</h5>
 
 
@@ -145,43 +146,9 @@
 					</div>
 				</div>
 				<aside class="col-xl-4">
-					<div data-sticky data-margin-top="80" data-sticky-for="1199">
-						<div class="card card-body bg-light p-4">
-							<h6 class="text-success fw-normal">Porosit tani</h6>
-
-							<ul class="list-group list-group-borderless mb-0">
-								<li class="list-group-item d-flex justify-content-between">
-									<span class="h6 fw-light mb-0">Cmimi</span>
-									<span class="h6 fw-light mb-0">@Model.Item.Price @Model.Item.Currency.Name</span>
-								</li>
-								<li class="list-group-item d-flex justify-content-between">
-									<span class="h6 fw-light mb-0">Zbritje (nuk aplikohet)</span>
-									<span class="h6 fw-light mb-0">0 @Model.Item.Currency.Name</span>
-								</li>
-								<li class="list-group-item py-0"><hr class="my-0"></li>
-								<li class="list-group-item d-flex justify-content-between pb-0">
-									<span class="h5 fw-normal mb-0">Totali</span>
-									<span class="h5 fw-normal mb-0">@Model.Item.Price @Model.Item.Currency.Name</span>
-								</li>
-							</ul>
-
-							<div class="d-grid mt-4 gap-2">
-								@foreach(var currency in Model.Currencies)
-								{
-									string IsChecked = "";
-									if (Model.Item.Currency.Code == currency.Code)
-									{
-										IsChecked = "checked";
-									}
-									<div class="form-check form-check-inline mb-0">
-										<input class="form-check-input" type="radio" name="discountOptions" id="@currency.Code" value="option1" @IsChecked>
-										<label class="form-check-label h6 fw-normal mb-0" for="discount1">Paguaj ne @currency.Name</label>
-									</div>
-							    }
-
-								<a href="cab-booking.html" class="btn btn-dark mb-0 mt-2">Paguaj tani</a>
-							</div>
-						</div>
+					<div class="card-header border-bottom bg-transparent px-0 pt-0">
+						<h4 class="mb-0">Pershkrimi i artikullit</h4>
+						<p>@Model.Item.Description</p>
 					</div>
 				</aside>
 			</div>
@@ -211,7 +178,7 @@
 			'hideMethod': 'fadeOut',
 		}
 
-		$("#addToCart").click(function() {
+		$(document).on("click", "#addToCart", function () {
 			var obj = {
 				ItemId: '@Model.Item.Id',
 				Amount: parseInt($(".amount").html())
@@ -223,6 +190,11 @@
 				success: function (data) {
 					if (data == "true") {
 						toastr.success("Shtimi ne shporte u be me sukses")
+						$("#cartStatus").html(`
+											<div class="d-flex justify-content-between">
+													<button id="deleteFromCart" data-id="@Model.Item.Id" class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Hiq nga shporta</button>
+												</div>
+								`);
 					}
 					else {
 						toastr.error("Ndodhi nje gabim gjate shtimit ne shporte")
@@ -234,9 +206,9 @@
 			});
 		})
 
-		$(".remove-btn").click(function () {
+		$(document).on("click", ".remove-btn", function () {
 			var currentNr = parseInt($(".amount").html());
-			if(currentNr > 0){
+			if (currentNr > 1) {
 				$(".amount").html(currentNr - 1);
 			}
 			else {
@@ -244,7 +216,7 @@
 			}
 		})
 
-		$(".add-btn").click(function () {
+		$(document).on("click", ".add-btn", function (){
 			var currentNr = parseInt($(".amount").html())
 			if (currentNr < '@Model.Item.AvailableQuantity') {
 				$(".amount").html(currentNr + 1);
@@ -254,6 +226,36 @@
 			}
 		})
 
-	})
+		$(document).on("click", "#deleteFromCart", function () {
+			console.log("clicking remove from cart")
+			var itemId = $(this).attr("data-id")
+			$.ajax({
+				url: "/Cart/DeleteItemFromCart?itemId=" + itemId,
+				method: "POST",
+				success: function (data) {
+					if (data == "true") {
+						toastr.success("Artikulli u hoq nga shporta")
+						$("#cartStatus").html(`
+										<div class="hstack gap-1 align-items-center">
+														<button type="button" class="btn btn-link remove-btn p-0 mb-0"><i class="bi bi-dash-circle fs-5 fa-fw"></i></button>
+														<h6 class="amount mb-0">0</h6>
+														<button type="button" class="btn btn-link add-btn p-0 mb-0"><i class="bi bi-plus-circle fs-5 fa-fw"></i></button>
+													</div>
 
+													<button id="addToCart" class="btn btn-sm btn-primary-soft mb-0">
+														Shto ne shporte
+													</button>
+								`);
+					}
+					else {
+						toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
+					}
+				},
+				error: function (err) {
+					toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
+				}
+			});
+		})
+
+	})
 </script>

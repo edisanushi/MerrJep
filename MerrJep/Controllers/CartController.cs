@@ -67,13 +67,6 @@ namespace MerrJep.Controllers
 					await _context.Carts.AddAsync(newCartItem);
 					await _context.SaveChangesAsync();
 
-					var item = await _context.Items.Where(x => x.Id == vm.ItemId).FirstOrDefaultAsync();
-					if(item == null) {
-						return Json("false");
-					}
-					item.AvailableQuantity -= vm.Amount;
-					await _context.SaveChangesAsync();
-
 					return Json("true");
 				}
 				return Json("false");

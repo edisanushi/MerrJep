@@ -6,5 +6,6 @@ namespace MerrJep.ViewModels
 	{
 		public Item Item { get; set; }
 		public List<Currency> Currencies { get; set; }
+		public bool AddedToCart { get; set; }
 	}
 }
