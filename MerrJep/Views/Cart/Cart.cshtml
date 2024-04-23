@@ -116,11 +116,11 @@
 
 								<div class="d-grid mt-4 gap-2">
 									<div class="form-check form-check-inline mb-0">
-										<input class="form-check-input" type="radio" name="discountOptions" id="lek" value="option1">
+										<input class="form-check-input" type="radio" name="discountOptions" id="lek" value="option1" checked>
 										<label class="form-check-label h6 fw-normal mb-0" for="discount1">Paguaj ne Lek</label>
 									</div>
 									<div class="form-check form-check-inline mb-0">
-										<input class="form-check-input" type="radio" name="discountOptions" id="euro" value="option1" checked>
+										<input class="form-check-input" type="radio" name="discountOptions" id="euro" value="option1">
 										<label class="form-check-label h6 fw-normal mb-0" for="discount1">Paguaj ne Euro</label>
 									</div>
 									<a href="cab-booking.html" class="btn btn-dark mb-0 mt-2">Paguaj tani</a>
@@ -152,6 +152,9 @@
 			'showMethod': 'fadeIn',
 			'hideMethod': 'fadeOut',
 		}
+
+		$
+
 		$(".btnDeleteItem").click(function () {
 			var itemId = $(this).attr("data-id")
 			$.ajax({
