@@ -130,6 +130,28 @@ namespace MerrJep.Controllers
 			return RedirectToAction("Account", "Login");
 		}
 
+
+		[HttpGet]
+		public async Task<IActionResult> GetMyAccount()
+		{
+			try
+			{
+				var user = await _userManager.GetUserAsync(User);
+				var userId = await _userManager.GetUserIdAsync(user);
+				var orders = _context.Orders.Where(x => x.ApplicationUserId == userId).ToList();
+				var orderList = new List<OrderVM>();
+				foreach(var order in orders)
+				{
+
+				}
+				return View("MyAccount");
+			}
+			catch (Exception ex)
+			{
+				return View("MyAccount");
+			}
+		}
+
 		
 	}
 }

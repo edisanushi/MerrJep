@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.ComponentModel.Design;
+using System.Linq;
 
 namespace MerrJep.Controllers
 {
@@ -112,5 +113,63 @@ namespace MerrJep.Controllers
 			}
 			return Json("true");
 		}
+
+		[HttpPost]
+		public async Task<IActionResult> PlaceOrder(OrderVM order) {
+			try
+			{
+				var user = await _userManager.GetUserAsync(User);
+				var userId = await _userManager.GetUserIdAsync(user);
+				if (user != null)
+				{
+					if(order != null)
+					{
+						var newOrder = new Order();
+						var dateOrdered = DateTime.Now;
+						newOrder.Name = $"{user.FirstName}_{user.LastName}_{dateOrdered}";
+						newOrder.TotalPrice = order.TotalPrice;
+						newOrder.DateOrdered = dateOrdered;
+						newOrder.CurrencyId = await _context.Currencies.Where(x => x.Code == order.currencyCode).Select(x => x.Id).FirstOrDefaultAsync();
+						newOrder.ApplicationUserId = userId;
+						await _context.Orders.AddAsync(newOrder);
+						await _context.SaveChangesAsync();
+
+						foreach(var orderItem in order.OrderItems)
+						{
+							var newOrderItem = new OrderItem();
+							newOrderItem.OrderId = newOrder.Id;
+							newOrderItem.ItemId = orderItem.ItemID;
+							newOrderItem.ItemQuantity = orderItem.Quantity;
+							await _context.OrderItems.AddAsync(newOrderItem);
+							await _context.SaveChangesAsync();
+
+							var item = await _context.Items.Where(x => x.Id == orderItem.ItemID).FirstOrDefaultAsync();
+							if(item != null)
+							{
+								item.AvailableQuantity -= orderItem.Quantity;
+								await _context.SaveChangesAsync();
+							}
+
+							var cartItem = await _context.Carts.Where(x => x.ItemId == orderItem.ItemID && x.ApplicationUserId == userId && x.Invalidated == 20).FirstOrDefaultAsync();
+							if(cartItem != null)
+							{
+								cartItem.Invalidated = 10;
+								await _context.SaveChangesAsync();
+							}
+						}
+
+						return Json("true");
+					}
+					return Json("false");
+					
+				}
+				return Json("false");
+			}
+			catch (Exception ex)
+			{
+				return Json("false");
+			}
+		}
+
 	}
 }
