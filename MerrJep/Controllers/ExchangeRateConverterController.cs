@@ -11,7 +11,7 @@ namespace MerrJep.Controllers
 		[HttpGet("/api/euro-to-lek-rate")]
 		public IActionResult EuroToLekRate()
 		{
-			var euroExchangeRate = Math.Round(ScrapeExchangeRate(), 5);
+			var euroExchangeRate = Math.Round(ScrapeExchangeRate(), 2);
 			return Ok(new { euroExchangeRate });
 		}
 
@@ -20,7 +20,7 @@ namespace MerrJep.Controllers
 		public IActionResult LekToEuroRate()
 		{
 			var euroExchangeRate = ScrapeExchangeRate();
-			var lekExchangeRate = Math.Round((1 / euroExchangeRate), 5);
+			var lekExchangeRate = Math.Round((1 / euroExchangeRate), 2);
 			return Ok(new { lekExchangeRate });
 		}
 
