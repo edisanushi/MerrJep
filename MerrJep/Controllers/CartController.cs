@@ -188,7 +188,7 @@ namespace MerrJep.Controllers
 						{
 							return Json(new
 							{
-								success = false,
+								success = "false",
 								message = $"Nuk ka mjaftueshem gjendje nga produkti {item.Item.Name}"
 							});
 						}
@@ -224,13 +224,13 @@ namespace MerrJep.Controllers
 
                     return Json(new
 					{
-						success = true,
+						success = "true",
 						message = "Porosia u krye me sukses"
                     });
                 }
                 return Json(new
                 {
-                    success = false,
+                    success = "false",
                     message = "Ndodhi nje gabim gjate kryerjes se porosise"
                 });
             }
@@ -238,7 +238,7 @@ namespace MerrJep.Controllers
             {
                 return Json(new
                 {
-                    success = false,
+                    success = "false",
                     message = "Ndodhi nje gabim gjate kryerjes se porosise"
                 });
             }

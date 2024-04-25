@@ -139,7 +139,8 @@ namespace MerrJep.Controllers
 			{
 				var user = await _userManager.GetUserAsync(User);
 				var userId = await _userManager.GetUserIdAsync(user);
-				var orders = _context.Orders.Where(x => x.ApplicationUserId == userId).ToList();
+				var orders = _context.Orders.Include(x => x.Currency).Where(x => x.ApplicationUserId == userId).ToList();
+				var accountVM = new AccountVM();
 				var orderList = new List<OrderVM>();
 				foreach(var order in orders)
 				{
@@ -151,11 +152,20 @@ namespace MerrJep.Controllers
 						.Where(x => x.OrderId == order.Id).ToList();
 					orderList.Add(orderVm);
 				}
-				return View("MyAccount", orderList);
+				accountVM.Orders = orderList;
+				var itemList = new List<Item>();
+				var items = _context.Items.Include(x => x.Currency)
+					.Include(x => x.Images)
+					.Include(x => x.ApplicationUser)
+					.Where(x => x.ApplicationUserId == userId).ToList();
+				accountVM.Items = items;
+				return View("MyAccount", accountVM);
 			}
 			catch (Exception ex)
 			{
-				return View("MyAccount", new List<OrderVM>());
+				return View("MyAccount", new AccountVM { 
+					Orders = new List<OrderVM>(),
+				    Items = new List<Item>()});
 			}
 		}
 
