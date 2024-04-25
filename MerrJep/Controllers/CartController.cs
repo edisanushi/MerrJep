@@ -140,6 +140,7 @@ namespace MerrJep.Controllers
 							newOrderItem.OrderId = newOrder.Id;
 							newOrderItem.ItemId = orderItem.ItemID;
 							newOrderItem.ItemQuantity = orderItem.Quantity;
+							newOrderItem.TotalItemPrice = orderItem.TotalItemPrice;
 							await _context.OrderItems.AddAsync(newOrderItem);
 							await _context.SaveChangesAsync();
 

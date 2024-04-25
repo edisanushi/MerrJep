@@ -14,5 +14,6 @@ namespace MerrJepData
 		public int ItemId { get; set; }
 		public virtual Item Item { get; set; }
 		public int ItemQuantity { get; set; }
+		public double TotalItemPrice { get; set; }
 	}
 }
