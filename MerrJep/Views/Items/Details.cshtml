@@ -85,7 +85,7 @@
 									@if (Model.Item.ApplicationUserId == loggedInUser.Id)
 									{
 										<div class="d-flex justify-content-between">
-											<button id="deleteItem" data-id="@Model.Item.Id" class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Fshi artikullin</button>
+											<a asp-area="" asp-controller="Items" asp-action="DeleteItem" asp-route-id="@Model.Item.Id" class="btn btn-danger-soft mb-0"><i class="fas fa-trash me-2"></i>Fshi artikullin</a>
 										</div>
 									}
 									else

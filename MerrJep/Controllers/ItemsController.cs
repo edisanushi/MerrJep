@@ -42,6 +42,7 @@ namespace MerrJep.Controllers
 				var userId = await _userManager.GetUserIdAsync(user);
 				newItem.ApplicationUserId = userId;
 				newItem.CurrencyId = _context.Currencies.Where(x => x.Code == item.CurrencyCode).Select(x => x.Id).FirstOrDefault();
+				newItem.Invalidated = 20;
 				_context.Items.Add(newItem);
 				_context.SaveChanges();
 
@@ -96,6 +97,21 @@ namespace MerrJep.Controllers
 				addedToCart = true;
 			itemDetails.AddedToCart = addedToCart;
 			return View(itemDetails);
+		}
+
+		public async Task<IActionResult> DeleteItem (int id)
+		{
+			try
+			{
+				var item = await _context.Items.Where(x => x.Id == id).FirstOrDefaultAsync();
+				item.Invalidated = 10;
+				await _context.SaveChangesAsync();
+				return RedirectToAction("GetMyAccount", "Account");
+			}
+			catch(Exception ex)
+			{
+				return RedirectToAction("Details", "Items", new { id = id });
+			}
 		}
 	}
 }

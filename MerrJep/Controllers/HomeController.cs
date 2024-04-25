@@ -32,7 +32,7 @@ namespace MerrJep.Controllers
 			}
 			var user = await _userManager.GetUserAsync(User);
 			var userId = await _userManager.GetUserIdAsync(user);
-			double total = _context.Items.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId).Count();
+			double total = _context.Items.Where(x => x.AvailableQuantity > 0 && x.ApplicationUserId != userId && x.Invalidated == 20).Count();
 			double nrOfPages = Math.Ceiling(total / itemsPerPage);
 			if (nrOfPages == 0) {
 				nrOfPages = 1;
@@ -55,15 +55,5 @@ namespace MerrJep.Controllers
 			return View(itemsList);
 		}
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
 	}
 }

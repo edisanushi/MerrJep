@@ -184,7 +184,7 @@ namespace MerrJep.Controllers
 					var orderItems = await _context.OrderItems.Include(x => x.Item).Where(x => x.OrderId == previousOrder.Id).ToListAsync();
 					foreach(var item in orderItems)
 					{
-						if (item.Item.AvailableQuantity < item.ItemQuantity)
+						if (item.Item.AvailableQuantity < item.ItemQuantity && item.Item.Invalidated == 10)
 						{
 							return Json(new
 							{

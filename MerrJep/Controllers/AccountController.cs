@@ -157,7 +157,7 @@ namespace MerrJep.Controllers
 				var items = _context.Items.Include(x => x.Currency)
 					.Include(x => x.Images)
 					.Include(x => x.ApplicationUser)
-					.Where(x => x.ApplicationUserId == userId).ToList();
+					.Where(x => x.ApplicationUserId == userId && x.Invalidated == 20).ToList();
 				accountVM.Items = items;
 				return View("MyAccount", accountVM);
 			}

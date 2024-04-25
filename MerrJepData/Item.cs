@@ -17,6 +17,7 @@ namespace MerrJepData
 		public double Price { get; set; }
 		public string Description { get; set; }
 		public DateTime DateAdded { get; set; }
+		public byte Invalidated { get; set; }
 
 		[MaxLength(450)]
 		public string ApplicationUserId { get; set; }
