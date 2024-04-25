@@ -89,18 +89,18 @@
 
 		$(document).on("click", ".replaceOrder", function () {
 			var obj = {
-				OrderId: $(this).attr("data-orderId")
+				OrderId: $(this).attr("data-orderId");
 			}
 			$.ajax({
 				url: "/Cart/ReplaceOrder",
 				method: "POST",
 				data: obj,
 				success: function (data) {
-					if (data == "true") {
-						toastr.success("Porosia u krye me sukses");
+					if (data.success == "true") {
+						toastr.success(data.message);
 					}
 					else {
-						toastr.error("Ndodhi nje gabim gjate berjes se porosise")
+						toastr.error(data.message)
 					}
 				},
 				error: function (err) {

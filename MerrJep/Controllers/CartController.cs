@@ -176,7 +176,9 @@ namespace MerrJep.Controllers
 		{
             try
             {
-				var previousOrder = await _context.Orders.Where(x => x.Id == OrderId).FirstOrDefaultAsync();
+                var user = await _userManager.GetUserAsync(User);
+                var userId = await _userManager.GetUserIdAsync(user);
+                var previousOrder = await _context.Orders.Where(x => x.Id == OrderId).FirstOrDefaultAsync();
                 if (previousOrder != null)
                 {
 					var orderItems = await _context.OrderItems.Include(x => x.Item).Where(x => x.OrderId == previousOrder.Id).ToListAsync();
@@ -196,44 +198,49 @@ namespace MerrJep.Controllers
 
                     var dateOrdered = DateTime.Now;
                     newOrder.Name = $"{user.FirstName}_{user.LastName}_{dateOrdered}";
-                    newOrder.TotalPrice = order.TotalPrice;
+                    newOrder.TotalPrice = previousOrder.TotalPrice;
                     newOrder.DateOrdered = dateOrdered;
-                    newOrder.CurrencyId = await _context.Currencies.Where(x => x.Code == order.currencyCode).Select(x => x.Id).FirstOrDefaultAsync();
+					newOrder.CurrencyId = previousOrder.CurrencyId;
                     newOrder.ApplicationUserId = userId;
                     await _context.Orders.AddAsync(newOrder);
                     await _context.SaveChangesAsync();
 
-                    foreach (var orderItem in order.OrderItems)
+                    foreach (var orderItem in orderItems)
                     {
                         var newOrderItem = new OrderItem();
                         newOrderItem.OrderId = newOrder.Id;
-                        newOrderItem.ItemId = orderItem.ItemID;
-                        newOrderItem.ItemQuantity = orderItem.Quantity;
+                        newOrderItem.ItemId = orderItem.ItemId;
+                        newOrderItem.ItemQuantity = orderItem.ItemQuantity;
                         await _context.OrderItems.AddAsync(newOrderItem);
                         await _context.SaveChangesAsync();
 
-                        var item = await _context.Items.Where(x => x.Id == orderItem.ItemID).FirstOrDefaultAsync();
+                        var item = await _context.Items.Where(x => x.Id == orderItem.ItemId).FirstOrDefaultAsync();
                         if (item != null)
                         {
-                            item.AvailableQuantity -= orderItem.Quantity;
-                            await _context.SaveChangesAsync();
-                        }
-
-                        var cartItem = await _context.Carts.Where(x => x.ItemId == orderItem.ItemID && x.ApplicationUserId == userId && x.Invalidated == 20).FirstOrDefaultAsync();
-                        if (cartItem != null)
-                        {
-                            cartItem.Invalidated = 10;
+                            item.AvailableQuantity -= orderItem.ItemQuantity;
                             await _context.SaveChangesAsync();
                         }
                     }
 
-                    return Json("true");
+                    return Json(new
+					{
+						success = true,
+						message = "Porosia u krye me sukses"
+                    });
                 }
-                return Json("false");
+                return Json(new
+                {
+                    success = false,
+                    message = "Ndodhi nje gabim gjate kryerjes se porosise"
+                });
             }
             catch (Exception ex)
             {
-                return Json("false");
+                return Json(new
+                {
+                    success = false,
+                    message = "Ndodhi nje gabim gjate kryerjes se porosise"
+                });
             }
         }
 
