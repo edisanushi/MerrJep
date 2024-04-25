@@ -2,6 +2,7 @@
 using MerrJepData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MerrJep.Controllers
@@ -142,13 +143,19 @@ namespace MerrJep.Controllers
 				var orderList = new List<OrderVM>();
 				foreach(var order in orders)
 				{
-
+					var orderVm = new OrderVM();
+					orderVm.Order = order;
+					orderVm.OrderItemList = _context.OrderItems
+						.Include(x => x.Item)
+						.ThenInclude(x => x.Currency)
+						.Where(x => x.OrderId == order.Id).ToList();
+					orderList.Add(orderVm);
 				}
-				return View("MyAccount");
+				return View("MyAccount", orderList);
 			}
 			catch (Exception ex)
 			{
-				return View("MyAccount");
+				return View("MyAccount", new List<OrderVM>());
 			}
 		}
 

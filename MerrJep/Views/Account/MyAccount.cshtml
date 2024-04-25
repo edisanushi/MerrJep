@@ -1,4 +1,4 @@
-﻿@model List<MerrJep.ViewModels.CartVM>
+﻿@model List<MerrJep.ViewModels.OrderVM>
 @using Newtonsoft.Json;
 
 @{
@@ -13,63 +13,56 @@
 		<div class="container">
 
 			<div class="row">
-				<div class="col-lg-4 col-xl-6">
-					<aside>
-						<div data-sticky data-margin-top="80" data-sticky-for="1199">
-							<div class="card card-body bg-light p-4">
-								<h6 class="text-success fw-normal">Porosit tani</h6>
+				@foreach (var order in Model)
+				{
+					<div class="col-lg-4 col-xl-6">
+						<aside>
+							<div data-sticky data-margin-top="80" data-sticky-for="1199">
+								<div class="card card-body bg-light p-4">
+									<h6 class="text-success fw-normal">@order.Order.Name</h6>
 
-								<ul class="list-group list-group-borderless mb-0">
-									@{
-										double total = 0;
-									}
-									@foreach (var cart in Model)
-									{
-										var totalItemPrice = cart.Item.Price * cart.Cart.AmountOfProduct;
-										total += totalItemPrice;
-										var currency = cart.Item.Currency.Name;
+									<ul class="list-group list-group-borderless mb-0">
+										@{
+											double total = 0;
+										}
+										@foreach (var orderItem in order.OrderItemList)
+										{
+											var totalItemPrice = orderItem.Item.Price * orderItem.ItemQuantity;
+											total += totalItemPrice;
+											var currency = orderItem.Item.Currency.Name;
+											<li class="list-group-item d-flex justify-content-between">
+												<div>
+													<span class="h6 fw-light mb-0">@orderItem.Item.Name</span>
+												</div>
+												<div class="cartItem @currency" data-id="@orderItem.ItemId">
+													<span class="h6 fw-light mb-0 itemPrice">@orderItem.ItemQuantity X @orderItem.Item.Price => </span>
+													<span class="h6 fw-light mb-0 totalItemPrice">@totalItemPrice</span>
+													<span class="h6 fw-light mb-0 currencyName">@orderItem.Item.Currency.Name</span>
+													<span class="h6 fw-light mb-0 convertedPrice"></span>
+												</div>
+											</li>
+										}
 										<li class="list-group-item d-flex justify-content-between">
-											<div>
-												<span class="h6 fw-light mb-0">@cart.Item.Name</span>
-											</div>
-											<div class="cartItem @currency" data-id="@cart.Item.Id">
-												<span class="h6 fw-light mb-0 itemPrice">@cart.Cart.AmountOfProduct X @cart.Item.Price => </span>
-												<span class="h6 fw-light mb-0 totalItemPrice">@totalItemPrice</span>
-												<span class="h6 fw-light mb-0 currencyName">@cart.Item.Currency.Name</span>
-												<span class="h6 fw-light mb-0 convertedPrice"></span>
+											<span class="h6 fw-light mb-0"> 0% </span>
+										</li>
+										<li class="list-group-item py-0"><hr class="my-0"></li>
+										<li class="list-group-item d-flex justify-content-between pb-0">
+											<span class="h5 fw-normal mb-0">Totali</span>
+											<div id="totalPrice">
+												<span class="h5 fw-normal mb-0 totalPrice"></span>
+												<span class="h5 fw-normal mb-0 totalCurrencyName"></span>
 											</div>
 										</li>
-									}
-									<li class="list-group-item d-flex justify-content-between">
-										<span class="h6 fw-light mb-0">Zbritje (nuk aplikohet)</span>
-										<span class="h6 fw-light mb-0"> 0% </span>
-									</li>
-									<li class="list-group-item py-0"><hr class="my-0"></li>
-									<li class="list-group-item d-flex justify-content-between pb-0">
-										<span class="h5 fw-normal mb-0">Totali</span>
-										<div id="totalPrice">
-											<span class="h5 fw-normal mb-0 totalPrice"></span>
-											<span class="h5 fw-normal mb-0 totalCurrencyName"></span>
-										</div>
-									</li>
-								</ul>
+									</ul>
 
-								<div class="d-grid mt-4 gap-2">
-
-									<div class="form-check form-check-inline mb-0" id="lekCurrency">
-										<input class="form-check-input" type="radio" name="currencyType" id="lek" value="ALL" checked="">
-										<label class="form-check-label h6 fw-normal mb-0" for="lek">Paguaj ne Lek</label>
+									<div class="d-grid mt-4 gap-2">
+										<button data-orderId="@order.Order.Id" class="btn btn-dark mb-0 mt-2 replaceOrder">Porosit Serish</button>
 									</div>
-									<div class="form-check form-check-inline mb-0" id="euroCurrency">
-										<input class="form-check-input" type="radio" name="currencyType" id="euro" value="EU">
-										<label class="form-check-label h6 fw-normal mb-0" for="euro">Paguaj ne Euro</label>
-									</div>
-									<button id="placeOrder" class="btn btn-dark mb-0 mt-2">Paguaj tani</button>
 								</div>
 							</div>
-						</div>
-					</aside>
-				</div>
+						</aside>
+					</div>
+				}
 			</div>
 		</div>
 	</section>
@@ -93,136 +86,13 @@
 			'showMethod': 'fadeIn',
 			'hideMethod': 'fadeOut',
 		}
-		var selectedCurrency = $("input[type='radio']:checked").attr("value");
 
-		if (selectedCurrency == "ALL")
-			convertEuroToLek();
-		else if (selectedCurrency == "EU")
-			convertLekToEuro();
-
-		$(".btnDeleteItem").click(function () {
-			var itemId = $(this).attr("data-id")
-			$.ajax({
-				url: "/Cart/DeleteItemFromCart?itemId=" + itemId,
-				method: "POST",
-				success: function (data) {
-					if (data == "true") {
-						toastr.success("Artikulli u hoq nga shporta")
-						window.location = "/Cart/GetUserCart";
-					}
-					else {
-						toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
-					}
-				},
-				error: function (err) {
-					toastr.error("Ndodhi nje gabim gjate heqjes se artikullit")
-				}
-			});
-		})
-
-
-		$("#deleteAll").click(function () {
-			$.ajax({
-				url: "/Cart/DeleteAllItemsFromCart",
-				method: "POST",
-				success: function (data) {
-					if (data == "true") {
-						toastr.success("Artikujt u hoq nga shporta")
-					}
-					else {
-						toastr.error("Ndodhi nje gabim gjate heqjes se artikujve")
-					}
-				},
-				error: function (err) {
-					toastr.error("Ndodhi nje gabim gjate heqjes se artikujve")
-				}
-			});
-		})
-
-
-		function convertEuroToLek() {
-			var euroRate;
-			$.ajax({
-				url: '/api/euro-to-lek-rate',
-				type: 'GET',
-				success: function (data) {
-					euroRate = data.euroExchangeRate;
-					var totalCartPrice = 0;
-					$(".cartItem.Euro").each(function () {
-						var totalPrice = parseInt($(this).children(".totalItemPrice").html());
-						var totalLekPrice = totalPrice * euroRate;
-						$(this).children(".convertedPrice").html(`(${totalLekPrice}LEK)`);
-						totalCartPrice += totalLekPrice;
-					})
-					$(".cartItem.LEK").each(function () {
-						var totalPrice = parseInt($(this).children(".totalItemPrice").html());
-						totalCartPrice += totalPrice;
-						$(this).children(".convertedPrice").html("");
-					})
-					$("#totalPrice").children(".totalPrice").html(totalCartPrice);
-					$("#totalPrice").children(".totalCurrencyName").html("LEK");
-				},
-				error: function (xhr, status, error) {
-					toastr.error("Ndodhi nje gabim gjate konvertimit te valutes nga euro ne lek")
-				}
-			});
-		}
-
-		function convertLekToEuro() {
-			var lekRate;
-			$.ajax({
-				url: '/api/lek-to-euro-rate',
-				type: 'GET',
-				success: function (data) {
-					lekRate = data.lekExchangeRate;
-					var totalCartPrice = 0;
-					$(".cartItem.LEK").each(function () {
-						var totalPrice = parseInt($(this).children(".totalItemPrice").html());
-						var totalEuroPrice = totalPrice * lekRate;
-						$(this).children(".convertedPrice").html(`(${totalEuroPrice}Euro)`);
-						totalCartPrice += totalEuroPrice;
-					})
-					$(".cartItem.Euro").each(function () {
-						var totalPrice = parseInt($(this).children(".totalItemPrice").html());
-						totalCartPrice += totalPrice;
-						$(this).children(".convertedPrice").html("");
-					})
-					$("#totalPrice").children(".totalPrice").html(totalCartPrice);
-					$("#totalPrice").children(".totalCurrencyName").html("Euro");
-				},
-				error: function (xhr, status, error) {
-					toastr.error("Ndodhi nje gabim gjate konvertimit te valutes nga lek ne euro")
-				}
-			});
-		}
-
-		$("#lekCurrency").click(function () {
-			convertEuroToLek();
-		});
-		$("#euroCurrency").click(function () {
-			convertLekToEuro();
-		});
-
-		$(document).on("click", "#placeOrder", function () {
-	@{
-		var OrderItemList = new List<MerrJep.ViewModels.OrderItemVM>();
-		foreach (var orderItem in Model)
-		{
-			OrderItemList.Add(new MerrJep.ViewModels.OrderItemVM
-				{
-					ItemID = orderItem.Cart.ItemId,
-					Quantity = orderItem.Cart.AmountOfProduct
-				});
-		}
-	}
-					var orderItemsJson = @Html.Raw(JsonConvert.SerializeObject(OrderItemList));
+		$(document).on("click", ".replaceOrder", function () {
 			var obj = {
-				OrderItems: orderItemsJson,
-				TotalPrice: parseInt($("#totalPrice").children(".totalPrice").html()),
-				currencyCode: $("input[type='radio']:checked").attr("value")
+				OrderId: $(this).attr("data-orderId")
 			}
 			$.ajax({
-				url: "/Cart/PlaceOrder",
+				url: "/Cart/ReplaceOrder",
 				method: "POST",
 				data: obj,
 				success: function (data) {

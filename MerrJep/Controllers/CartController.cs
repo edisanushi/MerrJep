@@ -140,7 +140,6 @@ namespace MerrJep.Controllers
 							newOrderItem.OrderId = newOrder.Id;
 							newOrderItem.ItemId = orderItem.ItemID;
 							newOrderItem.ItemQuantity = orderItem.Quantity;
-							newOrderItem.TotalItemPrice = orderItem.TotalItemPrice;
 							await _context.OrderItems.AddAsync(newOrderItem);
 							await _context.SaveChangesAsync();
 
@@ -172,5 +171,72 @@ namespace MerrJep.Controllers
 			}
 		}
 
-	}
+		[HttpPost]
+		public async Task<IActionResult> ReplaceOrder (int OrderId)
+		{
+            try
+            {
+				var previousOrder = await _context.Orders.Where(x => x.Id == OrderId).FirstOrDefaultAsync();
+                if (previousOrder != null)
+                {
+					var orderItems = await _context.OrderItems.Include(x => x.Item).Where(x => x.OrderId == previousOrder.Id).ToListAsync();
+					foreach(var item in orderItems)
+					{
+						if (item.Item.AvailableQuantity < item.ItemQuantity)
+						{
+							return Json(new
+							{
+								success = false,
+								message = $"Nuk ka mjaftueshem gjendje nga produkti {item.Item.Name}"
+							});
+						}
+					}
+
+					var newOrder = new Order();
+
+                    var dateOrdered = DateTime.Now;
+                    newOrder.Name = $"{user.FirstName}_{user.LastName}_{dateOrdered}";
+                    newOrder.TotalPrice = order.TotalPrice;
+                    newOrder.DateOrdered = dateOrdered;
+                    newOrder.CurrencyId = await _context.Currencies.Where(x => x.Code == order.currencyCode).Select(x => x.Id).FirstOrDefaultAsync();
+                    newOrder.ApplicationUserId = userId;
+                    await _context.Orders.AddAsync(newOrder);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var orderItem in order.OrderItems)
+                    {
+                        var newOrderItem = new OrderItem();
+                        newOrderItem.OrderId = newOrder.Id;
+                        newOrderItem.ItemId = orderItem.ItemID;
+                        newOrderItem.ItemQuantity = orderItem.Quantity;
+                        await _context.OrderItems.AddAsync(newOrderItem);
+                        await _context.SaveChangesAsync();
+
+                        var item = await _context.Items.Where(x => x.Id == orderItem.ItemID).FirstOrDefaultAsync();
+                        if (item != null)
+                        {
+                            item.AvailableQuantity -= orderItem.Quantity;
+                            await _context.SaveChangesAsync();
+                        }
+
+                        var cartItem = await _context.Carts.Where(x => x.ItemId == orderItem.ItemID && x.ApplicationUserId == userId && x.Invalidated == 20).FirstOrDefaultAsync();
+                        if (cartItem != null)
+                        {
+                            cartItem.Invalidated = 10;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    return Json("true");
+                }
+                return Json("false");
+            }
+            catch (Exception ex)
+            {
+                return Json("false");
+            }
+        }
+
+
+    }
 }
