@@ -130,7 +130,10 @@
 										<input class="form-check-input" type="radio" name="currencyType" id="euro" value="EU">
 										<label class="form-check-label h6 fw-normal mb-0" for="euro">Paguaj ne Euro</label>
 									</div>
-									<button id="placeOrder" class="btn btn-dark mb-0 mt-2">Paguaj tani</button>
+									@{
+										var disabledAttr = Model.Count > 0 ? "" : "disabled";
+									}
+									<button id="placeOrder" class="btn btn-dark mb-0 mt-2" @disabledAttr>Paguaj tani</button>
 								</div>
 							</div>
 						</div>
@@ -193,7 +196,8 @@
 				method: "POST",
 				success: function (data) {
 					if (data == "true") {
-						toastr.success("Artikujt u hoq nga shporta")
+						toastr.success("Artikujt u hoqen nga shporta")
+						window.location = "/Cart/GetUserCart";
 					}
 					else {
 						toastr.error("Ndodhi nje gabim gjate heqjes se artikujve")

@@ -1,5 +1,6 @@
 ﻿using MerrJep.ViewModels;
 using MerrJepData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MerrJep.Controllers
 {
+	[Authorize]
 	public class ItemsController : Controller
 	{
 

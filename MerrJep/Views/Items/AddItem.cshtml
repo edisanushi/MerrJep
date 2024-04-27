@@ -56,7 +56,7 @@
 									</div>
 
 									<div class="col-md-4">
-										<label class="form-label">Monedha</label>
+										<label class="form-label">Monedha<span style="color: red">*</span></label>
 										<select id="currencyCode" class="form-select js-choice">
 											<option value="0">Zgjidhni monedhen</option>
 											@foreach(var currency in Model)
@@ -183,6 +183,11 @@
 			}
 			SubmitForm(data);
 		}
+		else {
+			$('html, body').animate({
+				scrollTop: $(".error_label:visible").first().offset().top - 250
+			}, 500);
+		}
 	});
 
 	function getFilesFromDropzone(id) {
@@ -250,8 +255,18 @@
 			$(".sasia_error_label").css("display", "block");
 			isValid = false;
 		}
+		if (obj.AvailableQuantity == "0") {
+			$(".sasia_error_label").html("Sasia e artikullit nuk mund te jete 0");
+			$(".sasia_error_label").css("display", "block");
+			isValid = false;
+		}
 		if (isEmptyOrWhitespace(obj.Price)) {
 			$(".cmimi_error_label").html("Ju lutem plotesoni cmimin e artikullit");
+			$(".cmimi_error_label").css("display", "block");
+			isValid = false;
+		}
+		if (obj.Price == "0") {
+			$(".cmimi_error_label").html("Cmimi i artikullit nuk mund te jete 0");
 			$(".cmimi_error_label").css("display", "block");
 			isValid = false;
 		}
@@ -290,15 +305,15 @@
 	}
 
 	$("input").keyup(function () {
-		$(this).siblings("label.error_label").html("");
+		$(this).siblings("label.error_label").css("display", "none");
 	});
 
 	$("select").on("change", function () { 
-		$("div.choices").siblings("label.error_label").html("");
+		$("div.choices").siblings("label.error_label").css("display", "none");
 	});
 
 	$("textarea").keyup(function () {
-		$(this).siblings("label.error_label").html("");
+		$(this).siblings("label.error_label").css("display", "none");
 	});
 
 

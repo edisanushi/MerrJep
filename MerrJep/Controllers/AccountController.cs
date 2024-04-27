@@ -34,6 +34,10 @@ namespace MerrJep.Controllers
 		[HttpGet]
 		public IActionResult Login(string returnUrl = null)
 		{
+			if (User.Identity.IsAuthenticated)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 			return View();
 		}
 
@@ -59,6 +63,10 @@ namespace MerrJep.Controllers
 		[HttpGet]
 		public IActionResult Register()
 		{
+			if (User.Identity.IsAuthenticated)
+			{
+				return RedirectToAction("Index", "Home");
+			}
 			return View();
 		}
 
