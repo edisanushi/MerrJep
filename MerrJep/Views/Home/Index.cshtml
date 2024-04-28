@@ -51,7 +51,7 @@
 								{
 									imageName += '.' + imgNameParts[i];
 								}
-								<img src="data:image/@imgExtension;base64,@imgBase64" class="rounded-2" alt="@imageName" style="height: 250px">
+								<img src="data:image/@imgExtension;base64,@imgBase64" class="rounded-2" alt="@imageName">
 							}
 							else if (item.Images.Count > 1)
 							{
@@ -69,7 +69,7 @@
 												mainImageName += '.' + mainImgNameParts[i];
 											}
 										}
-										<img src="data:image/@mainImgExtension;base64,@mainImgBase64" class="rounded-2" alt="@mainImageName" style="height: 250px">
+										<img src="data:image/@mainImgExtension;base64,@mainImgBase64" class="rounded-2" alt="@mainImageName">
 										@foreach (var image in additionalImages)
 										{
 											var imgBase64 = Convert.ToBase64String(image.ImageByte);
@@ -80,7 +80,7 @@
 											{
 												imageName += '.' + imgNameParts[i];
 											}
-											<img src="data:image/@imgExtension;base64,@imgBase64" class="rounded-2" alt="imageName" style="height: 250px">
+											<img src="data:image/@imgExtension;base64,@imgBase64" class="rounded-2" alt="imageName">
 										}
 									</div>
 								</div>

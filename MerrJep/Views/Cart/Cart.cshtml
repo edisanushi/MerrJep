@@ -298,6 +298,7 @@
 				success: function (data) {
 					if (data == "true") {
 						toastr.success("Porosia u krye me sukses");
+						window.location = "/Cart/GetUserCart"
 					}
 					else {
 						toastr.error("Ndodhi nje gabim gjate berjes se porosise")
